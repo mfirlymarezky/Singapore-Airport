@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Singapore Airport | World's Best Flight Experience</title>
+    <link rel="icon" href="plane-departure-solid.ico" />
+    <!-- Bootstrap 5 CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <i class="fas fa-plane-departure me-2"></i>Singapore Airport
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="flights.html">Flights</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="history.html">My Bookings</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 hero-content mb-5">
+            <h1 class="hero-title">Your Journey Begins At Singapore Airport</h1>
+            <p class="hero-subtitle">
+              Experience luxury, nature, and world-class connectivity. Discover
+              why Singapore Airport is more than just a transit hub.
+            </p>
+          </div>
+          <div class="col-12">
+            <div class="search-container">
+              <h3 class="mb-4 text-white">Find Your Flight</h3>
+              <form id="searchForm" novalidate>
+                <div class="row g-2 align-items-end">
+                  <div class="col-lg-3 col-md-6">
+                    <label class="form-label small">Origin</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="origin"
+                      value="Singapore (SIN)"
+                      readonly
+                    />
+                  </div>
+                  <div class="col-lg-3 col-md-6">
+                    <label class="form-label small">Destination</label>
+                    <select class="form-select" id="destination" required>
+                      <option value="" selected disabled>Select</option>
+                      <option value="Sydney">Sydney (SYD)</option>
+                      <option value="Tokyo">Tokyo (NRT)</option>
+                      <option value="London">London (LHR)</option>
+                    </select>
+                    <div class="error-message">Select destination</div>
+                  </div>
+                  <div class="col-lg-2 col-md-4">
+                    <label class="form-label small">Departure From</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="fromDate"
+                      min="2026-05-01"
+                      required
+                    />
+                    <div class="error-message">Select start date</div>
+                  </div>
+                  <div class="col-lg-2 col-md-4">
+                    <label class="form-label small">Departure To</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      id="toDate"
+                      min="2026-05-01"
+                      required
+                    />
+                    <div class="error-message">Select end date</div>
+                  </div>
+                  <div class="col-lg-2 col-md-4">
+                    <button type="submit" class="btn btn-gold w-100">
+                      <i class="fas fa-search me-2"></i>Search
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-5 bg-white">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="display-5">Global Hub Excellence</h2>
+          <p class="text-muted">
+            Connecting you to the world with unparalleled service and
+            efficiency.
+          </p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-globe"></i>
+              </div>
+              <div class="stat-number">200+</div>
+              <div class="stat-label">Destinations Worldwide</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-plane"></i>
+              </div>
+              <div class="stat-number">50+</div>
+              <div class="stat-label">International Airlines</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="stat-card">
+              <div class="stat-icon">
+                <i class="fas fa-star"></i>
+              </div>
+              <div class="stat-number">World-Class</div>
+              <div class="stat-label">Service & Amenities</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-auto">
+      <div class="container text-center">
+        <h4 class="mb-4">Singapore Airport Group</h4>
+        <div class="social-links mb-4">
+          <a href="#" class="text-white mx-2"
+            ><i class="fab fa-facebook-f"></i
+          ></a>
+          <a href="#" class="text-white mx-2"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-white mx-2"
+            ><i class="fab fa-instagram"></i
+          ></a>
+        </div>
+        <p style="color: rgb(160, 174, 192)" class="small">
+          &copy; 2026 Singapore Airport Website. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document
+        .getElementById("searchForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+
+          let isValid = true;
+          const destination = document.getElementById("destination");
+          const fromDate = document.getElementById("fromDate");
+          const toDate = document.getElementById("toDate");
+
+          // Reset validation
+          [destination, fromDate, toDate].forEach((el) =>
+            el.classList.remove("is-invalid"),
+          );
+
+          if (!destination.value) {
+            destination.classList.add("is-invalid");
+            isValid = false;
+          }
+          if (!fromDate.value) {
+            fromDate.classList.add("is-invalid");
+            isValid = false;
+          }
+          if (!toDate.value) {
+            toDate.classList.add("is-invalid");
+            isValid = false;
+          }
+          if (
+            fromDate.value &&
+            toDate.value &&
+            new Date(fromDate.value) > new Date(toDate.value)
+          ) {
+            toDate.classList.add("is-invalid");
+            isValid = false;
+          }
+
+          if (isValid) {
+            const params = new URLSearchParams({
+              origin: document.getElementById("origin").value,
+              destination: destination.value,
+              fromDate: fromDate.value,
+              toDate: toDate.value,
+              passengers: "1",
+            });
+            window.location.href = `flights.html?${params.toString()}`;
+          }
+        });
+    </script>
+  </body>
+</html>
