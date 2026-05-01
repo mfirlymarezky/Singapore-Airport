@@ -4,16 +4,17 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Get flight data from localStorage
+  // baca data flight yang disimpan flights.js saat user klik "Book Now"
+  // JSON.parse karena localStorage hanya bisa simpan string — jadi objek harus dikonversi balik
   const selectedFlight = JSON.parse(localStorage.getItem("selectedFlight"));
 
+  // kalau user buka booking.html langsung tanpa lewat flights.html, data tidak ada — lempar balik ke home
   if (!selectedFlight) {
-    // Redirect back to search if no flight is selected
     window.location.href = "index.html";
     return;
   }
 
-  // 2. DOM Elements
+  // ambil semua elemen HTML yang akan dimanipulasi di halaman ini
   const flightSummary = document.getElementById("flightSummary");
   const bookingForm = document.getElementById("bookingForm");
   const seatClass = document.getElementById("seatClass");
@@ -23,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const passengerLabel = document.getElementById("passengerLabel");
   const leadSubtitle = document.getElementById("leadSubtitle");
 
-  // Confirmation elements
+  // elemen untuk halaman konfirmasi yang muncul setelah booking berhasil
   const mainContent = document.getElementById("mainBookingContent");
   const confirmationCard = document.getElementById("confirmationCard");
   const confRef = document.getElementById("confRef");
@@ -33,69 +34,89 @@ document.addEventListener("DOMContentLoaded", () => {
   const confRoute = document.getElementById("confRoute");
   const confPrice = document.getElementById("confPrice");
 
-  // Modal elements
+  // elemen modal konfirmasi yang muncul sebelum booking final diproses
   const confirmModalEl = document.getElementById("confirmModal");
-  const confirmModal = new bootstrap.Modal(confirmModalEl);
+  const confirmModal = new bootstrap.Modal(confirmModalEl); // inisialisasi Bootstrap modal via JS
   const modalSummary = document.getElementById("modalSummary");
   const modalPriceBreakdown = document.getElementById("modalPriceBreakdown");
   const finalConfirmBtn = document.getElementById("finalConfirmBtn");
 
-  // Tooltip Elements
+  // elemen tooltip hover untuk detail kelas kursi
   const seatTooltip = document.getElementById("seatTooltip");
   const tooltipIcon = document.getElementById("tooltipIcon");
   const tooltipTitle = document.getElementById("tooltipTitle");
   const tooltipBenefits = document.getElementById("tooltipBenefits");
 
+  // data tiap kelas kursi — multiplier dipakai untuk kalkulasi harga, sisanya untuk tooltip
+  // economy = harga asli (×1.0), first class = 6x lipat harga economy
   const seatData = {
     economy: {
       title: "Economy",
       multiplier: 1.0,
       icon: `<svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor"><path d="M4,18v3h3v-3h10v3h3v-3c1.1,0,2-0.9,2-2V7c0-1.1-0.9-2-2-2H4C2.9,5,2,5.9,2,7v9C2,17.1,2.9,18,4,18z M4,7h16v9H4V7z M6,9h12v2H6V9z"/></svg>`,
-      benefits: ["Standard recline", "30\" pitch", "Complimentary meal"]
+      benefits: ["Standard recline", '30" pitch', "Complimentary meal"],
     },
     premium: {
       title: "Premium Economy",
       multiplier: 1.8,
       icon: `<svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor"><path d="M4,18v3h3v-3h10v3h3v-3c1.1,0,2-0.9,2-2V7c0-1.1-0.9-2-2-2H4C2.9,5,2,5.9,2,7v9C2,17.1,2.9,18,4,18z M4,7h16v9H4V7z M6,9h12v4H6V9z"/></svg>`,
-      benefits: ["Extra legroom", "38\" pitch", "Priority boarding", "Enhanced meal"]
+      benefits: [
+        "Extra legroom",
+        '38" pitch',
+        "Priority boarding",
+        "Enhanced meal",
+      ],
     },
     business: {
       title: "Business",
       multiplier: 3.5,
       icon: `<svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor"><path d="M19,15h3v3h-3V15z M4,15h3v3H4V15z M2,11v2h20v-2H2z M7,5h10v2H7V5z M4,7h16v2H4V7z M4,13h16v2H4V13z"/></svg>`,
-      benefits: ["Lie-flat seat", "60\" pitch", "Lounge access", "Premium dining"]
+      benefits: [
+        "Lie-flat seat",
+        '60" pitch',
+        "Lounge access",
+        "Premium dining",
+      ],
     },
     first: {
       title: "First Class",
       multiplier: 6.0,
       icon: `<svg viewBox="0 0 24 24" width="40" height="40" fill="currentColor"><path d="M2,17h20v2H2V17z M3,13h18v2H3V13z M4,9h16v2H4V9z M5,5h14v2H5V5z M2,19h20v2H2V19z"/></svg>`,
-      benefits: ["Private suite", "Full-flat bed", "Dedicated butler", "Fine dining"]
-    }
+      benefits: [
+        "Private suite",
+        "Full-flat bed",
+        "Dedicated butler",
+        "Fine dining",
+      ],
+    },
   };
 
-  // Set initial values from search
+  // set jumlah penumpang awal dari data yang dikirim flights.js
   numPassengers.value = selectedFlight.passengerCount;
 
   /**
-   * Renders the flight summary card
+   * cetak ringkasan flight di bagian atas form booking
+   * data diambil dari selectedFlight yang sudah dibaca dari localStorage di atas
    */
   const renderSummary = () => {
     flightSummary.innerHTML = `
-            <div class="row align-items-center">
-                <div class="col-sm-6">
-                    <div class="h4 mb-1">${selectedFlight.airline}</div>
-                    <div class="text-muted small">${selectedFlight.flightNumber}</div>
-                </div>
-                <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
-                    <div class="h5 mb-0">${selectedFlight.originCode} (${selectedFlight.origin}) &rarr; ${selectedFlight.destinationCode} (${selectedFlight.destination})</div>
-                    <div class="text-muted small">Date: ${selectedFlight.date} | Departure: ${selectedFlight.departureTime}</div>
-                </div>
-            </div>
-        `;
+      <div class="row align-items-center">
+        <div class="col-sm-6">
+          <div class="h4 mb-1">${selectedFlight.airline}</div>
+          <div class="text-muted small">${selectedFlight.flightNumber}</div>
+        </div>
+        <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
+          <div class="h5 mb-0">${selectedFlight.originCode} (${selectedFlight.origin}) &rarr; ${selectedFlight.destinationCode} (${selectedFlight.destination})</div>
+          <div class="text-muted small">Date: ${selectedFlight.date} | Departure: ${selectedFlight.departureTime}</div>
+        </div>
+      </div>
+    `;
   };
 
   /**
-   * Calculates and updates the total price based on seat class and passenger count
+   * hitung total harga dan update tampilannya setiap kali kelas atau jumlah penumpang berubah
+   * rumus: harga dasar × multiplier kelas × jumlah penumpang
+   * return objek berisi semua nilai kalkulasi — dipakai ulang oleh completeBooking dan modal
    */
   const updateTotalPrice = () => {
     const count = parseInt(numPassengers.value) || 1;
@@ -103,57 +124,70 @@ document.addEventListener("DOMContentLoaded", () => {
     const multiplier = seatData[selectedClass].multiplier;
     const basePrice = selectedFlight.pricePerPerson;
     const total = basePrice * multiplier * count;
-
     const classLabel = seatData[selectedClass].title;
 
-    // Dynamic Labels
+    // tampilan label dan breakdown berbeda tergantung jumlah penumpang
     if (count > 1) {
       passengerLabel.innerText = "Lead Passenger Name";
-      leadSubtitle.classList.remove("d-none");
+      leadSubtitle.classList.remove("d-none"); // tampilkan keterangan "booking atas nama..."
       priceBreakdown.innerHTML = `${count} passengers &times; S$ ${basePrice.toLocaleString()} &times; ${multiplier} (${classLabel})`;
     } else {
       passengerLabel.innerText = "Full Name (as in Passport)";
-      leadSubtitle.classList.add("d-none");
+      leadSubtitle.classList.add("d-none"); // sembunyikan keterangan lead passenger kalau cuma 1 orang
       priceBreakdown.innerText = `S$ ${total.toLocaleString()} total (×${multiplier} ${classLabel})`;
     }
 
     totalPriceDisplay.innerText = `S$ ${total.toLocaleString()}`;
-    return { total, breakdown: priceBreakdown.innerText, count, multiplier, basePrice, classLabel };
+
+    // return semua nilai agar bisa dipakai ulang tanpa hitung ulang
+    return {
+      total,
+      breakdown: priceBreakdown.innerText,
+      count,
+      multiplier,
+      basePrice,
+      classLabel,
+    };
   };
 
   /**
-   * Tooltip Hover Logic
+   * tampilkan tooltip detail kelas kursi saat user hover dropdown
+   * isi tooltip diambil dari seatData berdasarkan nilai dropdown yang sedang aktif
    */
   const showTooltip = (val) => {
     const data = seatData[val];
     tooltipTitle.innerText = data.title;
     tooltipIcon.innerHTML = data.icon;
-    tooltipBenefits.innerHTML = data.benefits.map(b => `<li>${b}</li>`).join('');
-    
-    seatTooltip.classList.remove('d-none');
-    // Force reflow
-    void seatTooltip.offsetWidth;
-    seatTooltip.classList.add('show');
+    tooltipBenefits.innerHTML = data.benefits
+      .map((b) => `<li>${b}</li>`)
+      .join("");
+
+    seatTooltip.classList.remove("d-none");
+    void seatTooltip.offsetWidth; // paksa browser hitung ulang layout agar transisi CSS berjalan dari awal
+    seatTooltip.classList.add("show");
   };
 
   const hideTooltip = () => {
-    seatTooltip.classList.remove('show');
+    seatTooltip.classList.remove("show");
+    // tunggu animasi fade-out selesai (300ms) sebelum benar-benar disembunyikan dari DOM
     setTimeout(() => {
-      if (!seatTooltip.classList.contains('show')) {
-        seatTooltip.classList.add('d-none');
+      if (!seatTooltip.classList.contains("show")) {
+        seatTooltip.classList.add("d-none");
       }
     }, 300);
   };
 
-  seatClass.addEventListener('mouseenter', () => showTooltip(seatClass.value));
-  seatClass.addEventListener('mouseleave', hideTooltip);
-  seatClass.addEventListener('change', () => {
+  // tooltip muncul saat hover masuk, hilang saat hover keluar, update isinya saat pilihan berubah
+  seatClass.addEventListener("mouseenter", () => showTooltip(seatClass.value));
+  seatClass.addEventListener("mouseleave", hideTooltip);
+  seatClass.addEventListener("change", () => {
     updateTotalPrice();
     showTooltip(seatClass.value);
   });
 
   /**
-   * Generates a random alphanumeric booking reference
+   * buat kode booking acak 6 karakter dengan prefix "CHG-"
+   * tidak ada logika validasi di sini — murni untuk tampilan dummy
    */
   const generateRef = () => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -164,16 +198,16 @@ document.addEventListener("DOMContentLoaded", () => {
     return result;
   };
 
-  // Initialize
+  // jalankan render awal saat halaman pertama dibuka
   renderSummary();
   updateTotalPrice();
 
-  // Event listeners for real-time price update
-  seatClass.addEventListener("change", updateTotalPrice);
+  // update harga otomatis setiap kali jumlah penumpang berubah
   numPassengers.addEventListener("input", updateTotalPrice);
 
   /**
-   * Performs the final booking action
+   * eksekusi final setelah user klik "Confirm Booking" di dalam modal
+   * urutan: ambil semua data form → simpan ke localStorage history → tampilkan halaman konfirmasi
    */
   const completeBooking = () => {
     const priceData = updateTotalPrice();
@@ -183,15 +217,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const phone = document.getElementById("phone").value;
     const mealPreference = document.getElementById("mealPreference").value;
 
-    // Save to History
+    // susun satu objek booking lengkap yang akan disimpan ke riwayat
     const bookingRecord = {
-      reference: reference,
+      reference,
       passengerName: fullName,
-      email: email,
-      phone: phone,
+      email,
+      phone,
       seatClass: seatClass.value,
       passengerCount: priceData.count,
-      mealPreference: mealPreference,
+      mealPreference,
       route: `${selectedFlight.originCode} (${selectedFlight.origin}) to ${selectedFlight.destinationCode} (${selectedFlight.destination})`,
       date: selectedFlight.date,
       totalPrice: priceData.total,
@@ -199,46 +233,46 @@ document.addEventListener("DOMContentLoaded", () => {
       airline: selectedFlight.airline,
       flightNumber: selectedFlight.flightNumber,
       departureTime: selectedFlight.departureTime,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString(), // waktu booking dibuat, ditampilkan di history.html
     };
 
+    // ambil history yang sudah ada (kalau ada), tambahkan booking baru, simpan ulang
+    // || [] artinya: kalau belum ada history sama sekali, mulai dengan array kosong
     const history = JSON.parse(localStorage.getItem("bookingHistory")) || [];
     history.push(bookingRecord);
     localStorage.setItem("bookingHistory", JSON.stringify(history));
 
-    // Update Confirmation UI
+    // isi halaman konfirmasi dengan data booking yang baru saja dibuat
     confRef.innerText = reference;
     confName.innerText = fullName;
-    confNameLabel.innerText = priceData.count > 1 ? "Lead Passenger:" : "Passenger:";
+    confNameLabel.innerText =
+      priceData.count > 1 ? "Lead Passenger:" : "Passenger:";
     confCount.innerText = `${priceData.count} Person(s)`;
     confRoute.innerHTML = `${selectedFlight.originCode} (${selectedFlight.origin}) &rarr; ${selectedFlight.destinationCode} (${selectedFlight.destination})`;
-    
-    // Detailed Breakdown
-    document.getElementById("confBasePrice").innerText = `S$ ${priceData.basePrice.toLocaleString()}`;
-    document.getElementById("confSeatClass").innerText = `${priceData.classLabel} (×${priceData.multiplier})`;
-    document.getElementById("confCountDetail").innerText = `${priceData.count} Passenger(s)`;
-    
+
+    document.getElementById("confBasePrice").innerText =
+      `S$ ${priceData.basePrice.toLocaleString()}`;
+    document.getElementById("confSeatClass").innerText =
+      `${priceData.classLabel} (×${priceData.multiplier})`;
+    document.getElementById("confCountDetail").innerText =
+      `${priceData.count} Passenger(s)`;
     confPrice.innerText = `S$ ${priceData.total.toLocaleString()}`;
 
-    // Hide form, show confirmation
+    // sembunyikan form, tampilkan kartu konfirmasi
     mainContent.classList.add("d-none");
     confirmationCard.classList.remove("d-none");
 
-    // Clear current selection
+    // hapus data flight terpilih dari localStorage — sudah tidak dibutuhkan setelah booking selesai
     localStorage.removeItem("selectedFlight");
 
-    // Scroll to top
     window.scrollTo({ top: 0, behavior: "smooth" });
-    
-    // Hide Modal
     confirmModal.hide();
   };
 
-  // Form Submission
+  // tangkap submit form — validasi dulu sebelum tampilkan modal konfirmasi
   bookingForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+    e.preventDefault(); // cegah reload halaman default dari browser
 
-    // Simple Validation
     let isValid = true;
     let firstInvalid = null;
     const fields = ["fullName", "email", "phone"];
@@ -246,26 +280,26 @@ document.addEventListener("DOMContentLoaded", () => {
     fields.forEach((fieldId) => {
       const el = document.getElementById(fieldId);
       el.classList.remove("is-invalid", "shake");
-      
+
+      // cek kosong, dan khusus email cek ada "@" nya
       if (!el.value || (fieldId === "email" && !el.value.includes("@"))) {
         el.classList.add("is-invalid", "shake");
         isValid = false;
-        if (!firstInvalid) firstInvalid = el;
-        
-        // Remove shake class after animation
+        if (!firstInvalid) firstInvalid = el; // simpan field pertama yang invalid untuk di-scroll
         setTimeout(() => el.classList.remove("shake"), 500);
       }
     });
 
     if (!isValid) {
-      firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // scroll otomatis ke field yang bermasalah agar user langsung tahu harus isi apa
+      firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
       return;
     }
 
-    // Validation passed -> Show Confirmation Modal
+    // validasi lolos — susun isi modal konfirmasi sebelum ditampilkan
     const priceData = updateTotalPrice();
     const fullName = document.getElementById("fullName").value;
-    
+
     modalSummary.innerHTML = `
       <div class="row g-2 small">
         <div class="col-6 text-muted">Lead Passenger:</div>
@@ -301,11 +335,10 @@ document.addEventListener("DOMContentLoaded", () => {
         </tbody>
       </table>
     `;
-    
-    confirmModal.show();
+
+    confirmModal.show(); // tampilkan modal — user harus klik "Confirm Booking" untuk lanjut ke completeBooking
   });
 
-  // Final Confirmation Button
+  // tombol "Confirm Booking" di dalam modal — baru eksekusi booking setelah user yakin
   finalConfirmBtn.addEventListener("click", completeBooking);
 });
-

@@ -1,5 +1,7 @@
+/* manggil library google font biar pacak narok font inter dan poppins di pemanggilan css */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
 
+/* CSS VARIABLES standarisasi efisiensi pemakaian kode, daripada repot nulis kode hex pada tiap elemen, lemak langsung panggil makek ini bae didalam si  class, jadi cak state custom color library bae sih */
 :root {
     --primary-navy: #0a1628;
     --secondary-navy: #152238;
@@ -10,6 +12,7 @@
     --bg-light: #f8fafc;
     --card-bg: #ffffff;
     --border-color: #cccccc;
+    /* pling kliatan pas hover berwarna. all nge state kondisi all berubah cak warno, 0.3 waktu animasi, ease pergerakan nyo yg smooth itu, dimulai dengan lambat, lalu cepat di tengah, dan melambat lagi di akhir. */
     --transition: all 0.3s ease;
 }
 
@@ -17,6 +20,7 @@ body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-light);
     color: var(--primary-navy);
+    /* biar ktek opsi geser samping di body */
     overflow-x: hidden;
 }
 
@@ -38,12 +42,15 @@ h6 {
 .navbar {
     background-color: var(--primary-navy) !important;
     padding: 1rem 0;
+    /* [horizontal] [vertical] [blur] [color] */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand {
+    /* weight ketebelan */
     font-weight: 700;
     font-size: 1.5rem;
+    /* !important biar overrule penerapan cascade */
     color: var(--accent-gold) !important;
     letter-spacing: 1px;
 }
@@ -51,6 +58,7 @@ h6 {
 .nav-link {
     color: var(--text-light) !important;
     font-weight: 500;
+    /* vertikal, hor */
     margin: 0 10px;
     transition: var(--transition);
 }
@@ -61,9 +69,12 @@ h6 {
 
 /* Hero Section */
 .hero-section {
+    /* relative means memang tujuannyo nak ditumpuk si img pesawat itu dengen judu dan deskripsi itu, kareno relative mengabaikan posisi yang lain istilahnyo tu */
     position: relative;
     min-height: 100vh;
+    /* gradien = pencampuran warna yg mano objek nyo yolah url pesawat */
     background: linear-gradient(rgba(10, 22, 40, 0.7), rgba(10, 22, 40, 0.7)), url('https://images.unsplash.com/photo-1569154941061-e231b4725ef1?auto=format&fit=crop&q=80&w=2070');
+    /* atur gambar biar dak dipakso membesar disini (sizing) yolah dengan value cover */
     background-size: cover;
     background-position: center;
     display: flex;
@@ -75,6 +86,7 @@ h6 {
 }
 
 .hero-content {
+    /* biar responsif saat layar keci dio jg menyusut menyesuaikan */
     max-width: 800px;
 }
 
@@ -91,15 +103,6 @@ h6 {
     color: var(--text-muted);
 }
 
-/* Search Bar Styling */
-.search-container {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
 .form-label {
     color: var(--text-light);
     font-weight: 500;
@@ -114,6 +117,7 @@ h6 {
     transition: var(--transition);
 }
 
+/* aksen gelep di form sampingan si oren */
 .form-control:focus,
 .form-select:focus {
     border-color: var(--accent-gold);
@@ -135,13 +139,15 @@ textarea.form-control {
     transition: var(--transition);
 }
 
+/* contohnyo di confirm & book now */
 .btn-gold:hover {
     background-color: var(--accent-gold-hover);
+    /* transformy geser kesumbu y which is disini makek -2px yang artinyo ke atas 2px */
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(240, 165, 0, 0.3);
 }
 
-/* Stat Cards */
+/* Airport Achievment Cards */
 .stat-card {
     background: var(--card-bg);
     border-radius: 15px;
@@ -154,6 +160,7 @@ textarea.form-control {
 }
 
 .stat-card:hover {
+    /* transform bemaen disini, keatas 10 px */
     transform: translateY(-10px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
 }
@@ -188,27 +195,9 @@ textarea.form-control {
     transition: var(--transition);
 }
 
+/* simple effect for interactivity pas di hover di FLIGHT CARD scaling besarin 2 persen karena 102% yg mano default 100%*/
 .flight-card:hover {
     transform: scale(1.02);
-}
-
-.airline-logo {
-    width: 50px;
-    height: 50px;
-    background: #f0f4f8;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    color: var(--primary-navy);
-}
-
-.flight-info-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
 }
 
 .flight-time {
@@ -284,15 +273,25 @@ footer {
 }
 
 @keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
 }
 
 .shake {
-  animation: shake 0.2s ease-in-out 0s 2;
-  border-color: #ff4d4d !important;
-  box-shadow: 0 0 0 0.25rem rgba(255, 77, 77, 0.25) !important;
+    animation: shake 0.2s ease-in-out 0s 2;
+    border-color: #ff4d4d !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 77, 77, 0.25) !important;
 }
 
 /* Seat Tooltip Styling */
@@ -302,7 +301,7 @@ footer {
     z-index: 1050;
     pointer-events: none;
     transition: opacity 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
 }
 
 @media (min-width: 769px) {
@@ -312,6 +311,7 @@ footer {
         margin-left: 15px;
         transform: translateX(15px);
     }
+
     .seat-tooltip.show {
         opacity: 1 !important;
         transform: translateX(0);
@@ -326,6 +326,7 @@ footer {
         margin-bottom: 15px;
         transform: translateY(15px);
     }
+
     .seat-tooltip.show {
         opacity: 1 !important;
         transform: translateY(0);

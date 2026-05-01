@@ -3,24 +3,27 @@
  * 8 flights for May 2-3, 2026.
  */
 
+// variabel ini dibaca langsung oleh flights.js — makanya file ini harus diload lebih dulu di HTML
+// urutan script tag di HTML: flights-data.js dulu, baru flights.js
 const allFlightsData = [
-  // May 2, 2026
+  // ---- May 2, 2026 ----
+  // setiap objek = satu penerbangan, propertinya nanti dipanggil satu per satu di flights.js saat render card
   {
-    id: 1,
+    id: 1, // dipakai sebagai pengenal unik saat user klik "Book Now" — flights.js cari flight berdasarkan id ini
     airline: "Qatar Airways",
     logo: "https://img.favpng.com/10/19/15/qatar-airways-logo-airline-oryx-png-favpng-zzxmSycnu1dVBAvCSCDZEpwGU.jpg",
     flightNumber: "QR945",
     origin: "Singapore",
     originCode: "SIN",
-    originFlag: "https://flagcdn.com/w40/sg.png",
-    destination: "Indonesia",
+    originFlag: "https://flagcdn.com/w40/sg.png", // url bendera negara asal, ditampilkan di card
+    destination: "Indonesia", // nilai ini yang dicocokkan saat user filter destinasi
     destinationCode: "CGK",
     destinationFlag: "https://flagcdn.com/w40/id.png",
     departureTime: "02:15",
     arrivalTime: "03:05",
-    durationMinutes: 110,
-    pricePerPerson: 320,
-    date: "2026-05-02",
+    durationMinutes: 110, // disimpan dalam menit, nanti dikonversi ke "1h 50m" oleh flights.js
+    pricePerPerson: 320, // harga dasar economy — booking.js kalikan ini dengan jumlah penumpang dan multiplier kelas
+    date: "2026-05-02", // format YYYY-MM-DD, harus sama persis dengan nilai dari date input HTML agar filter cocok
   },
   {
     id: 2,
@@ -73,7 +76,8 @@ const allFlightsData = [
     pricePerPerson: 1100,
     date: "2026-05-02",
   },
-  // May 3, 2026
+  // ---- May 3, 2026 ----
+  // struktur identik dengan May 2, hanya id, flightNumber, waktu, dan harga yang berbeda
   {
     id: 5,
     airline: "Qatar Airways",

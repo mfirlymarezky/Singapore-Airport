@@ -7,51 +7,56 @@
     <title>Singapore Airport | World's Best Flight Experience</title>
     <!-- TAB ICON -->
     <link rel="icon" href="plane-departure-solid.ico" />
-    <!-- semacem library Bootstrap 5 CSS -->
+    <!-- library Bootstrap 5 CSS — menyediakan semua class utility seperti d-flex, col-md-4, btn, dll -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <!-- library Font Awesome for icons -->
+    <!-- library Font Awesome — menyediakan icon seperti fa-plane, fa-globe, fa-star -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <!-- eksternal CSS used -->
+    <!-- CSS custom kita sendiri — load paling terakhir agar bisa override style Bootstrap kalau perlu -->
     <link rel="stylesheet" href="style.css" />
   </head>
-  <!-- bootstrap start -->
-  <!-- ciri khas ny properti css ditulis sebagai namo class ny nian, display flex untuk layouting, lalu flex column agar antar bagian nya ter transisi secara vertikal, lalu min vertical height nya 100 sehingga dia memenuhi  -->
+
+  <!-- d-flex flex-column min-vh-100: bikin body jadi kolom vertikal yang tingginya minimal satu layar penuh -->
+  <!-- ini penting agar footer selalu nempel di bawah meskipun konten halaman sedikit -->
   <body class="d-flex flex-column min-vh-100">
-    <!-- Navbar -->
-    <!-- navbar class template bootstrap yang responsif saat dilihat dalam layar kecil ada button untuk mengatur pilihan di navbar, lalu navbar expand untuk expand di ukuran layar yang lebar katakanlah pada rasio 16:9 contohnya, lalu saat ukuran kecil seperti layar handphone dia memunculkan button untuk memilih di navbar -->
+    <!-- ======== NAVBAR ======== -->
+    <!-- navbar-expand-lg: di layar lebar (≥992px) semua link tampil sejajar, di bawahnya collapse jadi hamburger menu -->
+    <!-- navbar-dark: warna teks dan icon navbar jadi putih — cocok untuk background gelap -->
+    <!-- sticky-top: navbar ikut scroll dan selalu nempel di atas layar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-      <!-- buat posisi navbar jadi inline searah horizontal kek ngewrap gitu, intinya layouting menuhin ruang -->
+      <!-- container: batasi lebar konten navbar agar tidak mentok ke tepi layar -->
       <div class="container">
-        <!-- agar bentukannya bukan link, sehingga seamless proper, tapi tetep berfungsi seperti tombol home ketika di klik yang mana bernama index.html -->
+        <!-- navbar-brand: link logo/nama di kiri navbar, href ke index.html artinya klik = balik ke home -->
         <a class="navbar-brand" href="index.html">
-          <!-- icon di pesawat di navbar menggunakan font awesome lalu di style margin end bootstrap ukuran 2 untuk memberi jarak dengan tulisan singapore airport  -->
+          <!-- icon pesawat dari Font Awesome, me-2 = margin kanan 2 unit untuk jarak ke teks -->
           <i class="fas fa-plane-departure me-2"></i>Singapore Airport
         </a>
-        <!-- ialah tombol yang muncul kalau di layar kecil tadi atau namanya hamburger menu -->
-        <!-- navbar toggler untuk grafis 3 garis pada navbar menu button, kalau tak ada dia cuman bakal tampilan tombolnya kotak putih saja -->
-        <!-- type button katek efek langsung, tapi cuman state meaning bae sih -->
-        <!-- data bs toggle dan target untuk provide nav yang disembunyikan dalam button, kalau tak ada, ketika di klik, hamburger button dak akan nampilin apapun -->
+
+        <!-- tombol hamburger yang hanya muncul di layar kecil (saat navbar collapse) -->
+        <!-- data-bs-toggle="collapse" dan data-bs-target="#navbarNav" menghubungkan tombol ini -->
+        <!-- ke div di bawah yang punya id="navbarNav" — klik tombol = toggle tampil/sembunyi div itu -->
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
         >
-          <!-- ini jugo provide bentuk si garis 3 button itu yolah icon -->
+          <!-- navbar-toggler-icon: render tiga garis horizontal (ikon hamburger) di dalam tombol -->
           <span class="navbar-toggler-icon"></span>
         </button>
-        <!-- provide layout lanjutan menu nav dibawah, bukan inline! -->
+
+        <!-- div ini berisi daftar link navbar, defaultnya tersembunyi di layar kecil -->
+        <!-- akan tampil saat tombol hamburger diklik, atau selalu tampil di layar lebar -->
         <div class="collapse navbar-collapse" id="navbarNav">
-          <!-- setting jarak antara teks semacam gap vertikal antar teks di menu nav itu -->
+          <!-- ms-auto: dorong ul ini ke kanan, sehingga link-link navbar nempel di kanan navbar -->
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <!-- nav-link untuk agar tampilannya bukan berbentuk link anchor murni yang kurang enak dipandang -->
+              <!-- nav-link: styling link agar tampil sebagai item navigasi, bukan link biru bergaris bawah biasa -->
               <a class="nav-link" href="index.html">Home</a>
             </li>
             <li class="nav-item">
@@ -65,19 +70,22 @@
       </div>
     </nav>
 
-    <!-- Hero Section -->
-    <!--hero di layout dan url img nyo ado di css dan ado class ny nian  -->
+    <!-- ======== HERO SECTION ======== -->
+    <!-- class hero-section: background image, min-height, dan styling lainnya ada di style.css -->
     <section class="hero-section">
-      <!-- container bootstrap untuk layout form dari agar ke tengah dan proporsional -->
+      <!-- container: batasi lebar konten agar tidak terlalu lebar di layar besar -->
       <div class="container">
         <div class="row">
-          <!-- posisi layout hero description dibikin compact -->
+          <!-- col-12: ambil penuh lebar di semua ukuran layar -->
           <div class="col-12 hero-content">
             <h1 class="hero-title">Your Journey Begins At Singapore Airport</h1>
             <p class="hero-subtitle mb-4">
               Experience luxury, nature, and world-class connectivity. Discover
               why Singapore Airport is more than just a transit hub.
             </p>
+            <!-- btn btn-gold: styling tombol custom dari style.css -->
+            <!-- px-5 py-2.5: padding horizontal dan vertikal, shadow: bayangan -->
+            <!-- border-radius inline karena nilai spesifik (30px) tidak tersedia sebagai class Bootstrap -->
             <a
               href="flights.html"
               class="btn btn-gold px-5 py-2.5 shadow"
@@ -90,29 +98,30 @@
       </div>
     </section>
 
-    <!-- Stats Section -->
+    <!-- ======== STATS SECTION ======== -->
+    <!-- py-5: padding vertikal 5 unit atas dan bawah, bg-white: background putih -->
     <section class="py-5 bg-white">
       <div class="container">
         <div class="text-center mb-5">
-          <!-- display nganuke size -->
+          <!-- display-5: ukuran heading besar dari Bootstrap typography scale -->
           <h2 class="display-5">Global Hub Excellence</h2>
-          <!-- text muted diferensiasi warna -->
+          <!-- text-muted: warna abu-abu agar terlihat sebagai teks pendukung, bukan judul utama -->
           <p class="text-muted">
             Connecting you to the world with unparalleled service and
             efficiency.
           </p>
         </div>
-        <!-- as always bootstrap row samping, col ke bawah -->
+
+        <!-- row g-4: tiga card sejajar di layar lebar, g-4 = gap antar card -->
         <div class="row g-4">
+          <!-- col-md-4: di layar medium ke atas (≥768px) tiap card ambil 1/3 lebar, di bawahnya full width -->
           <div class="col-md-4">
+            <!-- stat-card: styling card custom dari style.css -->
             <div class="stat-card">
-              <!-- ukuran dan warna icon card -->
               <div class="stat-icon">
-                <!-- globe font awesome icon -->
                 <i class="fas fa-globe"></i>
               </div>
               <div class="stat-number">200+</div>
-              <!-- styling deskripsi kontras -->
               <div class="stat-label">Destinations Worldwide</div>
             </div>
           </div>
@@ -138,13 +147,13 @@
       </div>
     </section>
 
-    <!-- Footer -->
+    <!-- ======== FOOTER ======== -->
+    <!-- mt-auto: dorong footer ke bawah halaman — bekerja karena body pakai d-flex flex-column min-vh-100 -->
     <footer class="mt-auto">
-      <!-- center effect -->
       <div class="container text-center">
         <h4 class="mb-4">Singapore Airport Group</h4>
         <div class="social-links mb-4">
-          <!-- text white warna icon putih margin sumbu x (horizon) 2 -->
+          <!-- mx-2: margin horizontal kiri dan kanan agar icon tidak rapat satu sama lain -->
           <a href="#" class="text-white mx-2"
             ><i class="fab fa-facebook-f"></i
           ></a>
@@ -159,7 +168,8 @@
       </div>
     </footer>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap JS diload paling bawah — semua elemen HTML sudah ada duluan sebelum JS dijalankan -->
+    <!-- bundle = sudah termasuk Popper.js di dalamnya, dibutuhkan untuk komponen seperti modal dan dropdown -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

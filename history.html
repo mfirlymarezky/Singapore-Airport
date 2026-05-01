@@ -4,22 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Bookings | Singapore Airport</title>
-    <link rel="icon" href="plane-departure-solid.ico">
-    <!-- Bootstrap 5 CSS -->
+    <link rel="icon" href="plane-departure-solid.ico" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <!-- Font Awesome for icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <!-- Custom CSS -->
+    <!-- CSS custom load terakhir agar bisa override Bootstrap -->
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body class="bg-light d-flex flex-column min-vh-100">
-    <!-- Navbar -->
+    <!-- ======== NAVBAR ======== -->
+    <!-- sama persis dengan halaman lain, "active" ditaruh di "My Bookings" agar link ini terlihat aktif -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
       <div class="container">
         <a class="navbar-brand" href="index.html">
@@ -42,6 +42,7 @@
               <a class="nav-link" href="flights.html">Flights</a>
             </li>
             <li class="nav-item">
+              <!-- class "active" menandai halaman ini sebagai halaman yang sedang dibuka -->
               <a class="nav-link active" href="history.html">My Bookings</a>
             </li>
           </ul>
@@ -49,16 +50,19 @@
       </div>
     </nav>
 
+    <!-- ======== MAIN CONTENT ======== -->
     <div class="container py-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">My Booking History</h2>
+        <!-- tombol ini trigger modal konfirmasi "Clear All", bukan langsung hapus -->
         <button id="clearHistory" class="btn btn-outline-danger">
           <i class="fas fa-trash-alt me-2"></i>Clear History
         </button>
       </div>
 
+      <!-- container kosong yang akan diisi oleh renderHistory() saat halaman dibuka -->
+      <!-- sementara JS belum selesai baca localStorage, tampilkan spinner loading dulu -->
       <div id="historyContainer" class="row g-4">
-        <!-- Booking cards will be rendered here -->
         <div class="col-12 text-center py-5">
           <div class="spinner-border text-gold" role="status">
             <span class="visually-hidden">Loading...</span>
@@ -67,41 +71,78 @@
       </div>
     </div>
 
-    <!-- Booking Details Modal -->
+    <!-- ======== BOOKING DETAILS MODAL ======== -->
+    <!-- modal ini kosong di HTML — isinya diisi secara dinamis oleh showDetails() saat user klik "View Details" -->
+    <!-- modal-lg: ukuran modal lebih lebar untuk menampung banyak info + QR code -->
     <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content border-0 rounded-4 overflow-hidden shadow">
           <div class="modal-header bg-primary-navy text-white py-3">
-            <h5 class="modal-title"><i class="fas fa-ticket-alt me-2"></i>Booking Details</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h5 class="modal-title">
+              <i class="fas fa-ticket-alt me-2"></i>Booking Details
+            </h5>
+            <!-- data-bs-dismiss="modal": Bootstrap handle sendiri menutup modal saat tombol ini diklik -->
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
-          <div class="modal-body p-0" id="modalContent">
-            <!-- Modal content will be dynamically generated -->
-          </div>
+          <!-- id="modalContent" adalah target yang diisi showDetails() dengan data booking yang dipilih -->
+          <div class="modal-body p-0" id="modalContent"></div>
         </div>
       </div>
     </div>
 
-    <!-- Clear All History Modal -->
-    <div class="modal fade" id="clearHistoryModal" tabindex="-1" aria-hidden="true">
+    <!-- ======== CLEAR ALL CONFIRMATION MODAL ======== -->
+    <!-- modal terpisah khusus untuk konfirmasi "Clear All" — lebih proper daripada browser alert() -->
+    <div
+      class="modal fade"
+      id="clearHistoryModal"
+      tabindex="-1"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 rounded-4 shadow">
           <div class="modal-header bg-danger text-white py-3">
             <h5 class="modal-title">Clear All History</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="modal-body p-4">
-            <p class="mb-0">Are you sure you want to delete all booking history? <strong>This action cannot be undone.</strong></p>
+            <p class="mb-0">
+              Are you sure you want to delete all booking history?
+              <strong>This action cannot be undone.</strong>
+            </p>
           </div>
           <div class="modal-footer border-0">
-            <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Cancel</button>
-            <button type="button" id="confirmClearAll" class="btn btn-danger px-4">Clear All</button>
+            <button
+              type="button"
+              class="btn btn-secondary px-4"
+              data-bs-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <!-- id="confirmClearAll" ditangkap JS di bawah untuk eksekusi hapus semua -->
+            <button
+              type="button"
+              id="confirmClearAll"
+              class="btn btn-danger px-4"
+            >
+              Clear All
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-   <!-- Footer -->
+    <!-- ======== FOOTER ======== -->
+    <!-- mt-auto: dorong footer ke bawah, bekerja karena body pakai d-flex flex-column min-vh-100 -->
     <footer class="mt-auto">
       <div class="container text-center">
         <h4 class="mb-4">Singapore Airport Group</h4>
@@ -120,124 +161,161 @@
       </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- Bootstrap JS duluan sebelum script kita — karena script kita pakai new bootstrap.Modal() -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        // ambil elemen-elemen utama yang akan dimanipulasi
         const container = document.getElementById("historyContainer");
         const clearBtn = document.getElementById("clearHistory");
         const modalContent = document.getElementById("modalContent");
-        const bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
 
+        // inisialisasi Bootstrap modal via JS — ini yang membuat modal bisa dikontrol lewat .show() dan .hide()
+        const bookingModal = new bootstrap.Modal(
+          document.getElementById("bookingModal"),
+        );
+
+        /**
+         * baca semua booking dari localStorage lalu render sebagai card
+         * dipanggil saat halaman pertama dibuka DAN setiap kali ada booking yang dihapus
+         * — karena setelah hapus, tampilan harus diperbarui
+         */
         const renderHistory = () => {
-          const history = JSON.parse(localStorage.getItem("bookingHistory")) || [];
-          container.innerHTML = "";
+          // ambil array booking, kalau belum ada sama sekali gunakan array kosong
+          const history =
+            JSON.parse(localStorage.getItem("bookingHistory")) || [];
+          container.innerHTML = ""; // bersihkan tampilan lama sebelum render ulang
 
+          // kalau tidak ada booking sama sekali, tampilkan empty state
           if (history.length === 0) {
             container.innerHTML = `
-                <div class="col-12 text-center py-5">
-                    <i class="fas fa-calendar-times display-1 text-muted mb-4"></i>
-                    <h3>No bookings yet</h3>
-                    <p class="text-muted">Once you book a flight, it will appear here.</p>
-                    <a href="flights.html" class="btn btn-gold mt-3">Explore Flights</a>
-                </div>
+              <div class="col-12 text-center py-5">
+                <i class="fas fa-calendar-times display-1 text-muted mb-4"></i>
+                <h3>No bookings yet</h3>
+                <p class="text-muted">Once you book a flight, it will appear here.</p>
+                <a href="flights.html" class="btn btn-gold mt-3">Explore Flights</a>
+              </div>
             `;
-            clearBtn.style.display = "none";
+            clearBtn.style.display = "none"; // sembunyikan tombol "Clear History" kalau tidak ada data
             return;
           }
 
           clearBtn.style.display = "block";
+
+          // urutkan dari booking terbaru ke terlama berdasarkan timestamp yang disimpan booking.js
           history.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
+          // buat satu card per booking lalu tempel ke container
           history.forEach((booking) => {
             const card = document.createElement("div");
             card.className = "col-md-6 col-lg-4";
-            card.setAttribute("data-ref", booking.reference);
+            card.setAttribute("data-ref", booking.reference); // simpan reference di card untuk keperluan delete
+
             card.innerHTML = `
-                <div class="card border-0 shadow-sm rounded-4 h-100 transition-hover position-relative overflow-hidden">
-                  <button class="btn btn-sm btn-outline-danger position-absolute delete-booking" 
-                          data-ref="${booking.reference}" 
-                          style="top: 12px; right: 12px; width: 32px; height: 32px; padding: 0; z-index: 10; font-size: 12px; transition: all 0.2s ease; border-radius: 50%;">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
-                  <div class="card-body p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3 pe-4">
-                      <span class="badge bg-light text-primary-navy fw-bold border" style="color: var(--primary-navy) !important;">${booking.reference}</span>
-                      <small class="text-muted">${new Date(booking.timestamp).toLocaleDateString()}</small>
-                    </div>
-                    <h5 class="card-title mb-1">${booking.passengerName}</h5>
-                    <p class="card-text text-muted small mb-3">
-                      <i class="fas fa-plane-departure me-1"></i> ${booking.route}
-                    </p>
-                    <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-auto">
-                      <div class="small">
-                        <span class="text-muted">Date:</span> <strong>${booking.date}</strong>
-                      </div>
-                      <button class="btn btn-sm btn-outline-gold view-details" data-ref="${booking.reference}">
-                        View Details
-                      </button>
-                    </div>
+              <div class="card border-0 shadow-sm rounded-4 h-100 transition-hover position-relative overflow-hidden">
+                <!-- tombol hapus individual, muncul hanya saat card di-hover (diatur CSS di bawah) -->
+                <button class="btn btn-sm btn-outline-danger position-absolute delete-booking" 
+                        data-ref="${booking.reference}" 
+                        style="top: 12px; right: 12px; width: 32px; height: 32px; padding: 0; z-index: 10; font-size: 12px; transition: all 0.2s ease; border-radius: 50%;">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+                <div class="card-body p-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3 pe-4">
+                    <span class="badge bg-light text-primary-navy fw-bold border" style="color: var(--primary-navy) !important;">${booking.reference}</span>
+                    <!-- timestamp dikonversi dari ISO string ke format tanggal lokal yang terbaca manusia -->
+                    <small class="text-muted">${new Date(booking.timestamp).toLocaleDateString()}</small>
                   </div>
-                  <!-- Delete Confirmation Strip -->
-                  <div class="delete-confirm-strip bg-light border-top px-3 overflow-hidden" style="max-height: 0; transition: max-height 0.3s ease-out;">
-                    <div class="d-flex justify-content-between align-items-center py-3">
-                      <span class="small fw-bold text-danger">Delete this booking?</span>
-                      <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-link text-muted text-decoration-none cancel-delete">Cancel</button>
-                        <button class="btn btn-sm btn-danger confirm-delete" data-ref="${booking.reference}">Yes, Delete</button>
-                      </div>
+                  <h5 class="card-title mb-1">${booking.passengerName}</h5>
+                  <p class="card-text text-muted small mb-3">
+                    <i class="fas fa-plane-departure me-1"></i> ${booking.route}
+                  </p>
+                  <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-auto">
+                    <div class="small">
+                      <span class="text-muted">Date:</span> <strong>${booking.date}</strong>
+                    </div>
+                    <!-- data-ref dipakai event listener di bawah untuk tahu booking mana yang mau ditampilkan -->
+                    <button class="btn btn-sm btn-outline-gold view-details" data-ref="${booking.reference}">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+
+                <!-- strip konfirmasi hapus — defaultnya tersembunyi (max-height: 0) -->
+                <!-- muncul dengan animasi slide-down saat tombol trash diklik -->
+                <div class="delete-confirm-strip bg-light border-top px-3 overflow-hidden" style="max-height: 0; transition: max-height 0.3s ease-out;">
+                  <div class="d-flex justify-content-between align-items-center py-3">
+                    <span class="small fw-bold text-danger">Delete this booking?</span>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-sm btn-link text-muted text-decoration-none cancel-delete">Cancel</button>
+                      <button class="btn btn-sm btn-danger confirm-delete" data-ref="${booking.reference}">Yes, Delete</button>
                     </div>
                   </div>
                 </div>
+              </div>
             `;
             container.appendChild(card);
           });
 
-          // Add event listeners for details buttons
-          document.querySelectorAll('.view-details').forEach(btn => {
-            btn.addEventListener('click', () => {
+          // pasang event listener ke semua tombol "View Details" yang baru saja dibuat
+          document.querySelectorAll(".view-details").forEach((btn) => {
+            btn.addEventListener("click", () => {
               const ref = btn.dataset.ref;
-              const booking = history.find(b => b.reference === ref);
+              // cari objek booking yang cocok dari array, lalu kirim ke showDetails()
+              const booking = history.find((b) => b.reference === ref);
               if (booking) showDetails(booking);
             });
           });
 
-          // Handle delete button click (show strip)
-          document.querySelectorAll('.delete-booking').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const card = btn.closest('.card');
-              const strip = card.querySelector('.delete-confirm-strip');
-              strip.style.maxHeight = '100px';
-              btn.style.opacity = '0';
-              btn.style.pointerEvents = 'none';
+          // klik tombol trash → tampilkan strip konfirmasi di bawah card, sembunyikan tombol trash
+          document.querySelectorAll(".delete-booking").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              e.stopPropagation(); // cegah event naik ke elemen parent (mencegah trigger lain)
+              const card = btn.closest(".card");
+              const strip = card.querySelector(".delete-confirm-strip");
+              strip.style.maxHeight = "100px"; // buka strip dengan animasi max-height
+              btn.style.opacity = "0";
+              btn.style.pointerEvents = "none"; // nonaktifkan tombol trash selama strip terbuka
             });
           });
 
-          // Handle cancel delete
-          document.querySelectorAll('.cancel-delete').forEach(btn => {
-            btn.addEventListener('click', () => {
-              const card = btn.closest('.card');
-              const strip = card.querySelector('.delete-confirm-strip');
-              const deleteBtn = card.querySelector('.delete-booking');
-              strip.style.maxHeight = '0';
-              deleteBtn.style.opacity = '1';
-              deleteBtn.style.pointerEvents = 'auto';
+          // klik "Cancel" → tutup strip, kembalikan tombol trash
+          document.querySelectorAll(".cancel-delete").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const card = btn.closest(".card");
+              const strip = card.querySelector(".delete-confirm-strip");
+              const deleteBtn = card.querySelector(".delete-booking");
+              strip.style.maxHeight = "0"; // tutup strip dengan animasi
+              deleteBtn.style.opacity = "1";
+              deleteBtn.style.pointerEvents = "auto";
             });
           });
 
-          // Handle confirm delete
-          document.querySelectorAll('.confirm-delete').forEach(btn => {
-            btn.addEventListener('click', () => {
+          // klik "Yes, Delete" → hapus booking dari localStorage berdasarkan reference, render ulang
+          document.querySelectorAll(".confirm-delete").forEach((btn) => {
+            btn.addEventListener("click", () => {
               const ref = btn.dataset.ref;
-              let currentHistory = JSON.parse(localStorage.getItem("bookingHistory")) || [];
-              currentHistory = currentHistory.filter(b => b.reference !== ref);
-              localStorage.setItem("bookingHistory", JSON.stringify(currentHistory));
-              renderHistory();
+              // baca ulang dari localStorage (bukan pakai variabel history di atas)
+              // karena mungkin sudah ada perubahan sejak render terakhir
+              let currentHistory =
+                JSON.parse(localStorage.getItem("bookingHistory")) || [];
+              // filter out booking yang referencenya cocok — sisanya tetap disimpan
+              currentHistory = currentHistory.filter(
+                (b) => b.reference !== ref,
+              );
+              localStorage.setItem(
+                "bookingHistory",
+                JSON.stringify(currentHistory),
+              );
+              renderHistory(); // render ulang dengan data yang sudah diperbarui
             });
           });
         };
 
+        /**
+         * isi modal dengan detail lengkap booking yang dipilih, lalu tampilkan
+         * data booking sudah didapat dari renderHistory() lewat history.find()
+         */
         const showDetails = (booking) => {
           modalContent.innerHTML = `
             <div class="p-4">
@@ -247,24 +325,26 @@
                     <h6 class="text-muted text-uppercase small fw-bold mb-3">Passenger Information</h6>
                     <div class="row g-3">
                       <div class="col-6">
-                        <label class="text-muted small d-block">${booking.passengerCount > 1 ? 'Lead Passenger' : 'Full Name'}</label>
-                        <span>${booking.passengerName || '—'}</span>
+                        <!-- label berubah tergantung jumlah penumpang — konsisten dengan logika di booking.js -->
+                        <label class="text-muted small d-block">${booking.passengerCount > 1 ? "Lead Passenger" : "Full Name"}</label>
+                        <span>${booking.passengerName || "—"}</span>
                       </div>
                       <div class="col-6">
                         <label class="text-muted small d-block">Email</label>
-                        <span style="word-break: break-all;">${booking.email || '—'}</span>
+                        <!-- word-break: break-all mencegah email panjang merusak layout -->
+                        <span style="word-break: break-all;">${booking.email || "—"}</span>
                       </div>
                       <div class="col-6">
                         <label class="text-muted small d-block">Phone</label>
-                        <span>${booking.phone || '—'}</span>
+                        <span>${booking.phone || "—"}</span>
                       </div>
                       <div class="col-6">
                         <label class="text-muted small d-block">Seat Class</label>
-                        <span class="text-capitalize">${booking.seatClass || '—'}</span>
+                        <span class="text-capitalize">${booking.seatClass || "—"}</span>
                       </div>
                       <div class="col-6">
                         <label class="text-muted small d-block">Passengers</label>
-                        <span>${booking.passengerCount || '1'} Person(s)</span>
+                        <span>${booking.passengerCount || "1"} Person(s)</span>
                       </div>
                     </div>
                   </div>
@@ -276,30 +356,34 @@
                         <span class="text-gold fw-bold">S$ ${booking.totalPrice.toLocaleString()}</span>
                       </div>
                       <div class="small text-muted mb-1">${booking.route}</div>
-                      <div class="small text-muted border-bottom pb-2 mb-2">Departure: ${booking.date} at ${booking.departureTime || 'TBA'}</div>
-                      ${booking.passengerCount > 1 ? `
-                        <div class="small text-muted d-flex justify-content-between">
-                          <span>Price Breakdown:</span>
-                          <span>${booking.priceBreakdown}</span>
-                        </div>
-                      ` : `
-                        <div class="small text-muted d-flex justify-content-between">
-                          <span>Total Paid:</span>
-                          <span>S$ ${booking.totalPrice.toLocaleString()}</span>
-                        </div>
-                      `}
+                      <div class="small text-muted border-bottom pb-2 mb-2">Departure: ${booking.date} at ${booking.departureTime || "TBA"}</div>
+                      <!-- tampilkan breakdown harga kalau lebih dari 1 penumpang, total saja kalau 1 -->
+                      ${
+                        booking.passengerCount > 1
+                          ? `<div class="small text-muted d-flex justify-content-between">
+                             <span>Price Breakdown:</span>
+                             <span>${booking.priceBreakdown}</span>
+                           </div>`
+                          : `<div class="small text-muted d-flex justify-content-between">
+                             <span>Total Paid:</span>
+                             <span>S$ ${booking.totalPrice.toLocaleString()}</span>
+                           </div>`
+                      }
                     </div>
                   </div>
                   <div>
                     <h6 class="text-muted text-uppercase small fw-bold mb-2">Meal Preference</h6>
                     <p class="bg-light p-3 rounded-3 small mb-0">
-                      ${booking.mealPreference || 'No Preference'}
+                      ${booking.mealPreference || "No Preference"}
                     </p>
                   </div>
                 </div>
+
                 <div class="col-lg-4 text-center border-lg-start pt-4 pt-lg-0">
                   <div class="py-3">
                     <h6 class="text-muted text-uppercase small fw-bold mb-4">Boarding Pass QR</h6>
+                    <!-- QR code di-generate dari API eksternal dengan booking reference sebagai datanya -->
+                    <!-- setiap booking reference unik, jadi QR code tiap booking pasti berbeda -->
                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${booking.reference}" 
                          alt="QR Code" class="img-fluid mb-3 rounded border p-2 shadow-sm" style="width: 150px;">
                     <div class="fw-bold text-primary-navy mt-2">${booking.reference}</div>
@@ -312,22 +396,31 @@
           bookingModal.show();
         };
 
-        const clearAllModal = new bootstrap.Modal(document.getElementById('clearHistoryModal'));
-        const confirmClearAllBtn = document.getElementById('confirmClearAll');
+        // inisialisasi modal "Clear All" — terpisah dari bookingModal
+        const clearAllModal = new bootstrap.Modal(
+          document.getElementById("clearHistoryModal"),
+        );
+        const confirmClearAllBtn = document.getElementById("confirmClearAll");
 
+        // klik "Clear History" → tampilkan modal konfirmasi dulu, bukan langsung hapus
         clearBtn.addEventListener("click", () => {
           clearAllModal.show();
         });
 
+        // klik "Clear All" di dalam modal → hapus seluruh data, render ulang, tutup modal
         confirmClearAllBtn.addEventListener("click", () => {
-          localStorage.removeItem("bookingHistory");
+          localStorage.removeItem("bookingHistory"); // hapus key bookingHistory dari localStorage sepenuhnya
           renderHistory();
           clearAllModal.hide();
         });
 
+        // jalankan render saat halaman pertama dibuka
         renderHistory();
       });
     </script>
+
+    <!-- CSS inline di sini karena hanya dipakai di halaman ini saja -->
+    <!-- kalau ditaruh di style.css akan membingungkan karena tidak dipakai di halaman lain -->
     <style>
       .btn-outline-gold {
         color: var(--accent-gold);
@@ -337,6 +430,7 @@
         background-color: var(--accent-gold);
         color: var(--primary-navy);
       }
+      /* tombol trash default opacity 0 (tidak terlihat), muncul saat card di-hover */
       .card .delete-booking {
         opacity: 0;
         transition: opacity 0.2s ease;

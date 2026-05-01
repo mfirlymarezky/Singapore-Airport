@@ -5,21 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Available Flights | Singapore Airport</title>
     <link rel="icon" href="plane-departure-solid.ico" />
-    <!-- Bootstrap 5 CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <!-- Font Awesome for icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <!-- Custom CSS -->
+    <!-- CSS custom load terakhir agar bisa override Bootstrap -->
     <link rel="stylesheet" href="style.css" />
   </head>
-  <body class="bg-light d-flex flex-column min-vh-100">
-    <!-- Navbar -->
+
+  <!-- sama seperti halaman lain: d-flex flex-column min-vh-100 agar footer selalu nempel di bawah -->
+  <body class="d-flex flex-column min-vh-100">
+    <!-- ======== NAVBAR ======== -->
+    <!-- navbar-dark: teks dan icon jadi putih — cocok untuk background gelap dari style.css -->
+    <!-- sticky-top: navbar ikut scroll dan selalu nempel di atas, tidak hilang saat halaman discroll -->
+    <!-- "active" ditaruh di "Flights" karena ini halaman flights -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
       <div class="container">
         <a class="navbar-brand" href="index.html">
@@ -49,43 +52,87 @@
       </div>
     </nav>
 
-    <!-- Search Section -->
-    <div class="bg-primary-navy py-5 mb-4" style="background-color: var(--primary-navy)">
+    <!-- ======== SEARCH SECTION ======== -->
+    <!-- section ini punya dua bagian: form pencarian di atas, lalu judul hasil + filter di bawahnya -->
+    <!-- background navy diset lewat CSS variable karena Bootstrap tidak punya warna ini secara default -->
+    <div
+      class="bg-primary-navy py-5 mb-4"
+      style="background-color: var(--primary-navy)"
+    >
       <div class="container">
+        <!-- form pencarian — tidak punya tombol submit karena auto-search dihandle flights.js lewat event listener -->
+        <!-- setiap kali dropdown/input berubah, flights.js langsung filter dan render ulang hasilnya -->
         <div class="search-container bg-white p-4 rounded-4 shadow-sm mb-4">
           <form id="searchForm" class="row g-3 align-items-end">
+            <!-- origin di-readonly karena semua penerbangan berangkat dari Singapore (SIN) -->
+            <!-- tidak perlu bisa diubah user karena data memang tidak punya rute lain -->
             <div class="col-lg-4 col-md-6">
               <label class="form-label text-dark small fw-bold">Origin</label>
-              <input type="text" id="origin" class="form-control" value="Singapore (SIN)" readonly>
+              <input
+                type="text"
+                id="origin"
+                class="form-control"
+                value="Singapore (SIN)"
+                readonly
+              />
             </div>
+
+            <!-- value dropdown ini dicocokkan dengan properti "destination" di flights-data.js -->
+            <!-- kalau value kosong (""), flights.js tidak filter destinasi = tampil semua -->
             <div class="col-lg-4 col-md-6">
-              <label class="form-label text-dark small fw-bold">Destination</label>
+              <label class="form-label text-dark small fw-bold"
+                >Destination</label
+              >
               <select id="destination" class="form-select">
                 <option value="" selected>All Destinations</option>
                 <option value="Indonesia">Indonesia (CGK)</option>
                 <option value="Australia">Australia (SYD)</option>
               </select>
             </div>
-            <div class="col-lg-4 col-md-12">
-              <label class="form-label text-dark small fw-bold">Departure Date</label>
-              <input type="date" id="fromDate" class="form-control" min="2026-05-02" max="2026-05-03">
-            </div>
 
+            <!-- min dan max membatasi kalender hanya ke range tanggal yang ada di data -->
+            <!-- format harus YYYY-MM-DD agar cocok dengan properti "date" di flights-data.js -->
+            <div class="col-lg-4 col-md-12">
+              <label class="form-label text-dark small fw-bold"
+                >Departure Date</label
+              >
+              <input
+                type="date"
+                id="fromDate"
+                class="form-control"
+                min="2026-05-02"
+                max="2026-05-03"
+              />
+            </div>
           </form>
         </div>
 
+        <!-- bagian bawah search section: judul hasil di kiri, filter tambahan di kanan -->
         <div class="row align-items-center">
           <div class="col-md-6 text-white">
+            <!-- id="searchTitle" dan id="searchSubtitle" diupdate oleh flights.js setiap kali filter berubah -->
             <h2 id="searchTitle" class="mb-1">Available Flights</h2>
-            <p style="color: var(--text-muted)" class="mb-0" id="searchSubtitle">Please search for a flight to see available options</p>
+            <p
+              style="color: var(--text-muted)"
+              class="mb-0"
+              id="searchSubtitle"
+            >
+              Please search for a flight to see available options
+            </p>
           </div>
+
           <div class="col-md-6 mt-4 mt-md-0">
             <div class="row g-3 justify-content-md-end">
+              <!-- dropdown maskapai dikosongkan di sini — flights.js yang mengisinya secara dinamis dari data -->
+              <!-- kenapa dinamis? biar konsisten dengan data yang ada, tidak perlu edit HTML manual -->
               <div class="col-12 col-sm-6 col-md-5">
                 <select class="form-select form-select-sm" id="airlineFilter">
                   <option value="all">All Airlines</option>
                 </select>
               </div>
+
+              <!-- dropdown sort — value-nya dicocokkan dengan kondisi if/else di flights.js -->
+              <!-- misal value "priceLow" → flights.js sort ascending berdasarkan pricePerPerson -->
               <div class="col-12 col-sm-6 col-md-5">
                 <select class="form-select form-select-sm" id="sortSelect">
                   <option value="priceLow">Price: Low to High</option>
@@ -100,7 +147,9 @@
       </div>
     </div>
 
-    <!-- Results Container -->
+    <!-- ======== RESULTS CONTAINER ======== -->
+    <!-- div kosong ini diisi oleh renderFlights() di flights.js -->
+    <!-- spinner loading tampil dulu sampai flights.js selesai render hasil pertama -->
     <div class="container">
       <div class="row">
         <div class="col-12" id="flightsContainer">
@@ -113,7 +162,7 @@
       </div>
     </div>
 
-    <!-- Footer -->
+    <!-- ======== FOOTER ======== -->
     <footer class="mt-auto">
       <div class="container text-center">
         <h4 class="mb-4">Singapore Airport Group</h4>
@@ -132,7 +181,10 @@
       </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- urutan script tag ini penting: -->
+    <!-- 1. Bootstrap JS dulu — karena flights.js mungkin butuh komponen Bootstrap -->
+    <!-- 2. flights-data.js — deklarasi variabel allFlightsData harus ada sebelum flights.js dijalankan -->
+    <!-- 3. flights.js — baca allFlightsData dan mulai semua logika filter + render -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="flights-data.js"></script>
     <script src="flights.js"></script>
