@@ -1,40 +1,33 @@
 /**
  * Flights Logic
- * Handles dynamic flight generation, filtering, sorting, and rendering
+ * Handles searching, filtering, and rendering flights
  */
 
 document.addEventListener("DOMContentLoaded", () => {
   const allFlights = allFlightsData;
 
-  // 2. Read URL Parameters
-  const params = new URLSearchParams(window.location.search);
-  const destinationParam = params.get("destination");
-  const fromDateParam = params.get("fromDate");
-  const toDateParam = params.get("toDate");
-  const passengersParam = parseInt(params.get("passengers")) || 1;
-
-  // 3. DOM Elements
+  // 1. DOM Elements
+  const searchForm = document.getElementById("searchForm");
+  const originInput = document.getElementById("origin");
+  const destinationSelect = document.getElementById("destination");
+  const dateInput = document.getElementById("fromDate");
+  const airlineFilter = document.getElementById("airlineFilter");
+  const sortSelect = document.getElementById("sortSelect");
   const flightsContainer = document.getElementById("flightsContainer");
   const searchTitle = document.getElementById("searchTitle");
   const searchSubtitle = document.getElementById("searchSubtitle");
 
-  const filterFromDate = document.getElementById("filterFromDate");
-  const filterToDate = document.getElementById("filterToDate");
-  const airlineFilter = document.getElementById("airlineFilter");
-  const sortSelect = document.getElementById("sortSelect");
-
-  // Set initial filter values from URL
-  if (fromDateParam) filterFromDate.value = fromDateParam;
-  if (toDateParam) filterToDate.value = toDateParam;
-  if (destinationParam) {
-    searchTitle.innerText = `Flights to ${destinationParam}`;
-  }
+  // 2. Read URL Parameters
+  const params = new URLSearchParams(window.location.search);
+  const destinationParam = params.get("destination");
+  const fromDateParam = params.get("fromDate");
 
   /**
    * Populates the airline filter dropdown dynamically
    */
   const populateAirlines = () => {
     const airlines = [...new Set(allFlights.map((f) => f.airline))].sort();
+    airlineFilter.innerHTML = '<option value="all">All Airlines</option>';
     airlines.forEach((airline) => {
       const option = document.createElement("option");
       option.value = airline;
@@ -54,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="text-center py-5">
                     <i class="fas fa-plane-slash display-1 text-muted mb-4"></i>
                     <h3>No flights found</h3>
-                    <p class="text-muted">Try adjusting your filters or search criteria.</p>
+                    <p class="text-muted">Try adjusting your search or filters.</p>
                 </div>
             `;
       return;
@@ -62,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     flights.forEach((flight) => {
       const flightCard = document.createElement("div");
-      flightCard.className = "flight-card";
+      flightCard.className = "flight-card mb-3";
 
       const hours = Math.floor(flight.durationMinutes / 60);
       const mins = flight.durationMinutes % 60;
@@ -71,7 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="row align-items-center">
                     <div class="col-md-2 mb-3 mb-md-0">
                         <div class="d-flex align-items-center">
-                            <div class="airline-logo me-2">${flight.airline.charAt(0)}</div>
+                            <div class="airline-logo me-2" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 8px; overflow: hidden;">
+                                <img src="${flight.logo}" alt="${flight.airline}" 
+                                     style="width: 50px; height: 50px; object-fit: contain;"
+                                     onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'small fw-bold text-center\' style=\'font-size: 10px; line-height: 1.1;\'>${flight.airline}</div>'">
+                            </div>
                             <div>
                                 <div class="fw-bold small text-uppercase">${flight.airline}</div>
                                 <div class="text-muted small">${flight.flightNumber}</div>
@@ -81,8 +78,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="col-md-5 mb-3 mb-md-0">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="text-center">
-                                <div class="flight-time">${flight.departureTime}</div>
-                                <div class="flight-route">${flight.originCode}</div>
+                                <div class="flight-time h5 mb-0" style="font-weight: 700;">${flight.departureTime}</div>
+                                <div class="flight-route small">
+                                    <img src="${flight.originFlag}" alt="SG" class="me-1" style="width: 20px; vertical-align: middle;">
+                                    ${flight.originCode}
+                                </div>
                                 <div class="small text-muted">${flight.date}</div>
                             </div>
                             <div class="flex-grow-1 mx-3 text-center">
@@ -93,14 +93,16 @@ document.addEventListener("DOMContentLoaded", () => {
                                 <div class="small text-muted mt-1">Non-stop</div>
                             </div>
                             <div class="text-center">
-                                <div class="flight-time">${flight.arrivalTime}</div>
-                                <div class="flight-route">${flight.destinationCode}</div>
+                                <div class="flight-time h5 mb-0" style="font-weight: 700;">${flight.arrivalTime}</div>
+                                <div class="flight-route small">
+                                    <img src="${flight.destinationFlag}" alt="Flag" class="me-1" style="width: 20px; vertical-align: middle;">
+                                    ${flight.destinationCode}
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3 text-center mb-3 mb-md-0">
-                        <div class="flight-price">S$ ${flight.pricePerPerson}</div>
-                        <div class="text-muted small">per person</div>
+                        <div class="flight-price h4 mb-0" style="color: var(--accent-gold); font-weight: 700;">S$ ${flight.pricePerPerson}</div>
                     </div>
                     <div class="col-md-2 text-center">
                         <button class="btn btn-gold w-100 book-btn" data-id="${flight.id}">
@@ -120,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const bookingInfo = {
           ...selectedFlight,
-          passengerCount: passengersParam,
+          passengerCount: 1, // Default to 1
         };
         localStorage.setItem("selectedFlight", JSON.stringify(bookingInfo));
         window.location.href = "booking.html";
@@ -129,34 +131,43 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   /**
+   * Debounce helper
+   */
+  const debounce = (func, wait) => {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
+  };
+
+  /**
    * Filters and sorts the master list
    */
   const updateResults = () => {
+    const dest = destinationSelect.value;
+    const date = dateInput.value;
+    const airline = airlineFilter.value;
+    const sort = sortSelect.value;
+
     let filtered = allFlights;
 
-    // Apply Destination (from URL only for now)
-    if (destinationParam) {
-      filtered = filtered.filter((f) => f.destination === destinationParam);
+    // Filter by Destination
+    if (dest) {
+      filtered = filtered.filter(f => f.destination === dest);
     }
 
-    // Apply Date Range
-    const start = filterFromDate.value;
-    const end = filterToDate.value;
-    if (start) {
-      filtered = filtered.filter((f) => f.date >= start);
-    }
-    if (end) {
-      filtered = filtered.filter((f) => f.date <= end);
+    // Filter by Date
+    if (date) {
+      filtered = filtered.filter(f => f.date === date);
     }
 
-    // Apply Airline
-    const airline = airlineFilter.value;
+    // Filter by Airline
     if (airline !== "all") {
       filtered = filtered.filter((f) => f.airline === airline);
     }
 
     // Apply Sort
-    const sort = sortSelect.value;
     if (sort === "priceLow") {
       filtered.sort((a, b) => a.pricePerPerson - b.pricePerPerson);
     } else if (sort === "priceHigh") {
@@ -167,18 +178,36 @@ document.addEventListener("DOMContentLoaded", () => {
       filtered.sort((a, b) => b.departureTime.localeCompare(a.departureTime));
     }
 
-    // Limit results for performance (e.g., top 100)
-    renderFlights(filtered.slice(0, 50));
-
-    searchSubtitle.innerText = `Showing ${filtered.length} flight(s) matching your criteria`;
+    renderFlights(filtered);
+    
+    // Update labels
+    searchTitle.innerText = dest ? `Flights to ${dest}` : "All Available Flights";
+    
+    let subtitleParts = [];
+    subtitleParts.push(date ? date : "all dates");
+    subtitleParts.push(airline !== "all" ? airline : "all airlines");
+    
+    searchSubtitle.innerText = `Showing ${filtered.length} flight(s) (${subtitleParts.join(', ')})`;
   };
 
-  // Initial load
+  // Initial load logic
   populateAirlines();
+
+  if (destinationParam) destinationSelect.value = destinationParam;
+  if (fromDateParam) dateInput.value = fromDateParam;
+  
+  // Show all or filtered results immediately on load
   updateResults();
 
-  // Event listeners for filters
-  [filterFromDate, filterToDate, airlineFilter, sortSelect].forEach((el) => {
-    el.addEventListener("change", updateResults);
-  });
+  // Event listeners for auto-search
+  const debouncedSearch = debounce(updateResults, 300);
+
+  destinationSelect.addEventListener("change", updateResults);
+  dateInput.addEventListener("input", debouncedSearch);
+  airlineFilter.addEventListener("change", updateResults);
+  sortSelect.addEventListener("change", updateResults);
+
+  // Prevent form submission
+  searchForm.addEventListener("submit", (e) => e.preventDefault());
 });
+

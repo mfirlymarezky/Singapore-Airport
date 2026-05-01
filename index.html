@@ -2,41 +2,57 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <!-- sintaks meta data yang membantu membuat tampilan responsive untuk layar kecil -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Singapore Airport | World's Best Flight Experience</title>
+    <!-- TAB ICON -->
     <link rel="icon" href="plane-departure-solid.ico" />
-    <!-- Bootstrap 5 CSS -->
+    <!-- semacem library Bootstrap 5 CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <!-- Font Awesome for icons -->
+    <!-- library Font Awesome for icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <!-- Custom CSS -->
+    <!-- eksternal CSS used -->
     <link rel="stylesheet" href="style.css" />
   </head>
+  <!-- bootstrap start -->
+  <!-- ciri khas ny properti css ditulis sebagai namo class ny nian, display flex untuk layouting, lalu flex column agar antar bagian nya ter transisi secara vertikal, lalu min vertical height nya 100 sehingga dia memenuhi  -->
   <body class="d-flex flex-column min-vh-100">
     <!-- Navbar -->
+    <!-- navbar class template bootstrap yang responsif saat dilihat dalam layar kecil ada button untuk mengatur pilihan di navbar, lalu navbar expand untuk expand di ukuran layar yang lebar katakanlah pada rasio 16:9 contohnya, lalu saat ukuran kecil seperti layar handphone dia memunculkan button untuk memilih di navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+      <!-- buat posisi navbar jadi inline searah horizontal kek ngewrap gitu, intinya layouting menuhin ruang -->
       <div class="container">
+        <!-- agar bentukannya bukan link, sehingga seamless proper, tapi tetep berfungsi seperti tombol home ketika di klik yang mana bernama index.html -->
         <a class="navbar-brand" href="index.html">
+          <!-- icon di pesawat di navbar menggunakan font awesome lalu di style margin end bootstrap ukuran 2 untuk memberi jarak dengan tulisan singapore airport  -->
           <i class="fas fa-plane-departure me-2"></i>Singapore Airport
         </a>
+        <!-- ialah tombol yang muncul kalau di layar kecil tadi atau namanya hamburger menu -->
+        <!-- navbar toggler untuk grafis 3 garis pada navbar menu button, kalau tak ada dia cuman bakal tampilan tombolnya kotak putih saja -->
+        <!-- type button katek efek langsung, tapi cuman state meaning bae sih -->
+        <!-- data bs toggle dan target untuk provide nav yang disembunyikan dalam button, kalau tak ada, ketika di klik, hamburger button dak akan nampilin apapun -->
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
         >
+          <!-- ini jugo provide bentuk si garis 3 button itu yolah icon -->
           <span class="navbar-toggler-icon"></span>
         </button>
+        <!-- provide layout lanjutan menu nav dibawah, bukan inline! -->
         <div class="collapse navbar-collapse" id="navbarNav">
+          <!-- setting jarak antara teks semacam gap vertikal antar teks di menu nav itu -->
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link active" href="index.html">Home</a>
+              <!-- nav-link untuk agar tampilannya bukan berbentuk link anchor murni yang kurang enak dipandang -->
+              <a class="nav-link" href="index.html">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="flights.html">Flights</a>
@@ -50,71 +66,25 @@
     </nav>
 
     <!-- Hero Section -->
+    <!--hero di layout dan url img nyo ado di css dan ado class ny nian  -->
     <section class="hero-section">
+      <!-- container bootstrap untuk layout form dari agar ke tengah dan proporsional -->
       <div class="container">
         <div class="row">
-          <div class="col-12 hero-content mb-5">
+          <!-- posisi layout hero description dibikin compact -->
+          <div class="col-12 hero-content">
             <h1 class="hero-title">Your Journey Begins At Singapore Airport</h1>
-            <p class="hero-subtitle">
+            <p class="hero-subtitle mb-4">
               Experience luxury, nature, and world-class connectivity. Discover
               why Singapore Airport is more than just a transit hub.
             </p>
-          </div>
-          <div class="col-12">
-            <div class="search-container">
-              <h3 class="mb-4 text-white">Find Your Flight</h3>
-              <form id="searchForm" novalidate>
-                <div class="row g-2 align-items-end">
-                  <div class="col-lg-3 col-md-6">
-                    <label class="form-label small">Origin</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="origin"
-                      value="Singapore (SIN)"
-                      readonly
-                    />
-                  </div>
-                  <div class="col-lg-3 col-md-6">
-                    <label class="form-label small">Destination</label>
-                    <select class="form-select" id="destination" required>
-                      <option value="" selected disabled>Select</option>
-                      <option value="Sydney">Sydney (SYD)</option>
-                      <option value="Tokyo">Tokyo (NRT)</option>
-                      <option value="London">London (LHR)</option>
-                    </select>
-                    <div class="error-message">Select destination</div>
-                  </div>
-                  <div class="col-lg-2 col-md-4">
-                    <label class="form-label small">Departure From</label>
-                    <input
-                      type="date"
-                      class="form-control"
-                      id="fromDate"
-                      min="2026-05-01"
-                      required
-                    />
-                    <div class="error-message">Select start date</div>
-                  </div>
-                  <div class="col-lg-2 col-md-4">
-                    <label class="form-label small">Departure To</label>
-                    <input
-                      type="date"
-                      class="form-control"
-                      id="toDate"
-                      min="2026-05-01"
-                      required
-                    />
-                    <div class="error-message">Select end date</div>
-                  </div>
-                  <div class="col-lg-2 col-md-4">
-                    <button type="submit" class="btn btn-gold w-100">
-                      <i class="fas fa-search me-2"></i>Search
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
+            <a
+              href="flights.html"
+              class="btn btn-gold px-5 py-2.5 shadow"
+              style="border-radius: 30px"
+            >
+              <i class="fas fa-plane-departure me-2"></i>Explore Flights
+            </a>
           </div>
         </div>
       </div>
@@ -124,19 +94,25 @@
     <section class="py-5 bg-white">
       <div class="container">
         <div class="text-center mb-5">
+          <!-- display nganuke size -->
           <h2 class="display-5">Global Hub Excellence</h2>
+          <!-- text muted diferensiasi warna -->
           <p class="text-muted">
             Connecting you to the world with unparalleled service and
             efficiency.
           </p>
         </div>
+        <!-- as always bootstrap row samping, col ke bawah -->
         <div class="row g-4">
           <div class="col-md-4">
             <div class="stat-card">
+              <!-- ukuran dan warna icon card -->
               <div class="stat-icon">
+                <!-- globe font awesome icon -->
                 <i class="fas fa-globe"></i>
               </div>
               <div class="stat-number">200+</div>
+              <!-- styling deskripsi kontras -->
               <div class="stat-label">Destinations Worldwide</div>
             </div>
           </div>
@@ -164,9 +140,11 @@
 
     <!-- Footer -->
     <footer class="mt-auto">
+      <!-- center effect -->
       <div class="container text-center">
         <h4 class="mb-4">Singapore Airport Group</h4>
         <div class="social-links mb-4">
+          <!-- text white warna icon putih margin sumbu x (horizon) 2 -->
           <a href="#" class="text-white mx-2"
             ><i class="fab fa-facebook-f"></i
           ></a>
@@ -183,54 +161,5 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      document
-        .getElementById("searchForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          let isValid = true;
-          const destination = document.getElementById("destination");
-          const fromDate = document.getElementById("fromDate");
-          const toDate = document.getElementById("toDate");
-
-          // Reset validation
-          [destination, fromDate, toDate].forEach((el) =>
-            el.classList.remove("is-invalid"),
-          );
-
-          if (!destination.value) {
-            destination.classList.add("is-invalid");
-            isValid = false;
-          }
-          if (!fromDate.value) {
-            fromDate.classList.add("is-invalid");
-            isValid = false;
-          }
-          if (!toDate.value) {
-            toDate.classList.add("is-invalid");
-            isValid = false;
-          }
-          if (
-            fromDate.value &&
-            toDate.value &&
-            new Date(fromDate.value) > new Date(toDate.value)
-          ) {
-            toDate.classList.add("is-invalid");
-            isValid = false;
-          }
-
-          if (isValid) {
-            const params = new URLSearchParams({
-              origin: document.getElementById("origin").value,
-              destination: destination.value,
-              fromDate: fromDate.value,
-              toDate: toDate.value,
-              passengers: "1",
-            });
-            window.location.href = `flights.html?${params.toString()}`;
-          }
-        });
-    </script>
   </body>
 </html>

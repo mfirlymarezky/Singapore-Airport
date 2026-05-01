@@ -49,53 +49,52 @@
       </div>
     </nav>
 
-    <!-- Filter Header Section -->
-    <div
-      class="bg-primary-navy py-4 mb-5"
-      style="background-color: var(--primary-navy)"
-    >
+    <!-- Search Section -->
+    <div class="bg-primary-navy py-5 mb-4" style="background-color: var(--primary-navy)">
       <div class="container">
-        <div class="row">
-          <div class="col-12 text-white mb-4">
-            <h2 id="searchTitle">Available Flights</h2>
-            <p style="color: rgb(160, 174, 192)
-;" class="mb-0" id="searchSubtitle">
-              Showing results for your search
-            </p>
-          </div>
+        <div class="search-container bg-white p-4 rounded-4 shadow-sm mb-4">
+          <form id="searchForm" class="row g-3 align-items-end">
+            <div class="col-lg-4 col-md-6">
+              <label class="form-label text-dark small fw-bold">Origin</label>
+              <input type="text" id="origin" class="form-control" value="Singapore (SIN)" readonly>
+            </div>
+            <div class="col-lg-4 col-md-6">
+              <label class="form-label text-dark small fw-bold">Destination</label>
+              <select id="destination" class="form-select">
+                <option value="" selected>All Destinations</option>
+                <option value="Indonesia">Indonesia (CGK)</option>
+                <option value="Australia">Australia (SYD)</option>
+              </select>
+            </div>
+            <div class="col-lg-4 col-md-12">
+              <label class="form-label text-dark small fw-bold">Departure Date</label>
+              <input type="date" id="fromDate" class="form-control" min="2026-05-02" max="2026-05-03">
+            </div>
+
+          </form>
         </div>
-        <!-- Filters Row -->
-        <div class="row g-3">
-          <div class="col-md-3">
-            <label class="form-label small">From Date</label>
-            <input
-              type="date"
-              class="form-control form-control-sm"
-              id="filterFromDate"
-            />
+
+        <div class="row align-items-center">
+          <div class="col-md-6 text-white">
+            <h2 id="searchTitle" class="mb-1">Available Flights</h2>
+            <p style="color: var(--text-muted)" class="mb-0" id="searchSubtitle">Please search for a flight to see available options</p>
           </div>
-          <div class="col-md-3">
-            <label class="form-label small">To Date</label>
-            <input
-              type="date"
-              class="form-control form-control-sm"
-              id="filterToDate"
-            />
-          </div>
-          <div class="col-md-3">
-            <label class="form-label small">Airline</label>
-            <select class="form-select form-select-sm" id="airlineFilter">
-              <option value="all">All Airlines</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label small">Sort By</label>
-            <select class="form-select form-select-sm" id="sortSelect">
-              <option value="priceLow">Price: Low to High</option>
-              <option value="priceHigh">Price: High to Low</option>
-              <option value="timeEarly">Departure: Earliest</option>
-              <option value="timeLate">Departure: Latest</option>
-            </select>
+          <div class="col-md-6 mt-4 mt-md-0">
+            <div class="row g-3 justify-content-md-end">
+              <div class="col-12 col-sm-6 col-md-5">
+                <select class="form-select form-select-sm" id="airlineFilter">
+                  <option value="all">All Airlines</option>
+                </select>
+              </div>
+              <div class="col-12 col-sm-6 col-md-5">
+                <select class="form-select form-select-sm" id="sortSelect">
+                  <option value="priceLow">Price: Low to High</option>
+                  <option value="priceHigh">Price: High to Low</option>
+                  <option value="timeEarly">Departure: Earliest</option>
+                  <option value="timeLate">Departure: Latest</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
       </div>
