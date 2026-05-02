@@ -116,15 +116,22 @@
 
                   <div class="col-md-6">
                     <label class="form-label text-dark">Phone Number</label>
-                    <input
-                      type="tel"
-                      class="form-control"
-                      id="phone"
-                      placeholder="e.g. +62 812 3456 7890"
-                      required
-                    />
+                    <div class="input-group unified-phone-input">
+                      <select class="form-select" id="phoneCode">
+                        <option value="+65" selected>🇸🇬 +65 Singapore</option>
+                        <option value="+62">🇮🇩 +62 Indonesia</option>
+                        <option value="+61">🇦🇺 +61 Australia</option>
+                      </select>
+                      <input
+                        type="tel"
+                        class="form-control"
+                        id="phone"
+                        placeholder="e.g. 9123 4567"
+                        required
+                      />
+                    </div>
                     <div class="error-message">
-                      Please enter your phone number.
+                      Please enter a valid phone number
                     </div>
                   </div>
 

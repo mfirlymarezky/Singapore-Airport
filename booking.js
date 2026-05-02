@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const priceBreakdown = document.getElementById("priceBreakdown");
   const passengerLabel = document.getElementById("passengerLabel");
   const leadSubtitle = document.getElementById("leadSubtitle");
+  const phoneCode = document.getElementById("phoneCode");
 
   // elemen untuk halaman konfirmasi yang muncul setelah booking berhasil
   const mainContent = document.getElementById("mainBookingContent");
@@ -206,6 +207,32 @@ document.addEventListener("DOMContentLoaded", () => {
   numPassengers.addEventListener("input", updateTotalPrice);
 
   /**
+   * Phone Code Dropdown: Show full name in list, show only code when selected.
+   */
+  const fullPhoneLabels = {
+    "+65": "🇸🇬 +65 Singapore",
+    "+62": "🇮🇩 +62 Indonesia",
+    "+61": "🇦🇺 +61 Australia"
+  };
+
+  const updatePhoneCodeDisplay = (isFull) => {
+    Array.from(phoneCode.options).forEach(opt => {
+      opt.text = isFull ? fullPhoneLabels[opt.value] : opt.value;
+    });
+  };
+
+  // When focused/clicked, show full text so the list is readable
+  phoneCode.addEventListener("mousedown", () => updatePhoneCodeDisplay(true));
+  phoneCode.addEventListener("focus", () => updatePhoneCodeDisplay(true));
+  
+  // When changed or blurred, show only the short code
+  phoneCode.addEventListener("change", () => updatePhoneCodeDisplay(false));
+  phoneCode.addEventListener("blur", () => updatePhoneCodeDisplay(false));
+
+  // Initial state: short
+  updatePhoneCodeDisplay(false);
+
+  /**
    * eksekusi final setelah user klik "Confirm Booking" di dalam modal
    * urutan: ambil semua data form → simpan ke localStorage history → tampilkan halaman konfirmasi
    */
@@ -214,7 +241,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const reference = generateRef();
     const fullName = document.getElementById("fullName").value;
     const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
+    const phoneCode = document.getElementById("phoneCode").value;
+    const phoneInput = document.getElementById("phone").value;
+    const combinedPhone = `${phoneCode} ${phoneInput}`;
     const mealPreference = document.getElementById("mealPreference").value;
 
     // susun satu objek booking lengkap yang akan disimpan ke riwayat
@@ -222,7 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
       reference,
       passengerName: fullName,
       email,
-      phone,
+      phone: combinedPhone,
       seatClass: seatClass.value,
       passengerCount: priceData.count,
       mealPreference,
@@ -281,15 +310,34 @@ document.addEventListener("DOMContentLoaded", () => {
       const el = document.getElementById(fieldId);
       el.classList.remove("is-invalid", "shake");
 
-      // cek kosong, dan khusus email cek ada "@" nya
-      if (!el.value || (fieldId === "email" && !el.value.includes("@"))) {
+      let isFieldValid = true;
+
+      if (!el.value) {
+        isFieldValid = false;
+      } else if (fieldId === "email" && !el.value.includes("@")) {
+        isFieldValid = false;
+      } else if (fieldId === "phone") {
+        // strip all characters except digits
+        const strippedPhone = el.value.replace(/\D/g, "");
+        const digitCount = strippedPhone.length;
+        if (digitCount < 7 || digitCount > 12) {
+          isFieldValid = false;
+        }
+      }
+
+      if (!isFieldValid) {
         el.classList.add("is-invalid", "shake");
+        const errorMsg = el.nextElementSibling;
+        if (fieldId === "phone" && errorMsg && errorMsg.classList.contains("error-message")) {
+          errorMsg.innerText = "Please enter a valid phone number";
+        }
         isValid = false;
-        if (!firstInvalid) firstInvalid = el; // simpan field pertama yang invalid untuk di-scroll
+        if (!firstInvalid) firstInvalid = el;
         setTimeout(() => el.classList.remove("shake"), 500);
       }
     });
 
+    // ERROR INVALID LANGSUNG DICARI DI FORM NY
     if (!isValid) {
       // scroll otomatis ke field yang bermasalah agar user langsung tahu harus isi apa
       firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });

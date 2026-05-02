@@ -35,7 +35,7 @@ h4,
 h5,
 h6 {
     font-family: 'Poppins', sans-serif;
-    font-weight: 600;
+    font-weight: 700 !important;
 }
 
 /* Navbar Styling */
@@ -49,7 +49,7 @@ h6 {
 .navbar-brand {
     /* weight ketebelan */
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     /* !important biar overrule penerapan cascade */
     color: var(--accent-gold) !important;
     letter-spacing: 1px;
@@ -91,14 +91,14 @@ h6 {
 }
 
 .hero-title {
-    font-size: 3.5rem;
+    font-size: 4rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
-    line-height: 1.2;
+    line-height: 1.1;
 }
 
 .hero-subtitle {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     margin-bottom: 2.5rem;
     color: var(--text-muted);
 }
@@ -129,6 +129,42 @@ textarea.form-control {
     border: 2px solid var(--border-color);
 }
 
+/* Unified Phone Input */
+.unified-phone-input {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    transition: var(--transition);
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.unified-phone-input:focus-within {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 0.25rem rgba(240, 165, 0, 0.25);
+}
+
+.unified-phone-input .form-select,
+.unified-phone-input .form-control {
+    border: none !important;
+    box-shadow: none !important;
+    height: 48px;
+}
+
+.unified-phone-input .form-select {
+    width: 90px !important;
+    flex: none !important;
+    border-right: 1px solid var(--border-color) !important;
+    border-radius: 0 !important;
+    background-position: right 0.5rem center;
+    padding-right: 1.5rem;
+    cursor: pointer;
+}
+
+.unified-phone-input .form-control {
+    flex-grow: 1;
+    border-radius: 0 !important;
+}
+
 .btn-gold {
     background-color: var(--accent-gold);
     color: var(--primary-navy);
@@ -137,6 +173,7 @@ textarea.form-control {
     border-radius: 8px;
     border: none;
     transition: var(--transition);
+    color: white;
 }
 
 /* contohnyo di confirm & book now */
@@ -237,9 +274,15 @@ footer {
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .hero-title {
-        font-size: 2.2rem;
+        font-size: 1.7rem;
+        line-height: 1.1;
+    }
+
+    .hero-subtitle {
+        font-size: 0.8rem;
+        max-width: 270px;
     }
 
     .hero-section {
@@ -248,12 +291,34 @@ footer {
         flex-direction: column;
         justify-content: center;
         padding: 0;
+        text-align: center;
+    }
+
+    .hero-section .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .hero-section .btn-gold {
         width: fit-content;
         font-size: 0.9rem;
         padding: 0.6rem 1.5rem;
+    }
+
+    .stat-card,
+    .booking-history-card {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    h2.display-5 {
+        font-size: 1.7rem;
+    }
+
+    .faq {
+        max-width: 300px;
+        text-align: center;
     }
 }
 
@@ -350,4 +415,36 @@ footer {
     left: 0;
     color: var(--accent-gold);
     font-weight: bold;
+}
+
+/* Accordion Styling */
+.accordion-button:not(.collapsed) {
+    background-color: var(--primary-navy);
+    color: var(--accent-gold);
+}
+
+.accordion-button:focus {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 0.25rem rgba(240, 165, 0, 0.25);
+}
+
+.accordion-button::after {
+    filter: brightness(0) invert(1);
+}
+
+.accordion-button.collapsed::after {
+    filter: none;
+}
+
+/* Route Badges */
+.badge-most-booked {
+    background: rgba(13, 110, 253, 0.15) !important;
+    color: #0d6efd !important;
+    border: 1px solid rgba(13, 110, 253, 0.3) !important;
+}
+
+.badge-best-deal {
+    background: rgba(25, 135, 84, 0.15) !important;
+    color: #198754 !important;
+    border: 1px solid rgba(25, 135, 84, 0.3) !important;
 }

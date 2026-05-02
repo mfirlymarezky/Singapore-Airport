@@ -213,18 +213,17 @@
             card.setAttribute("data-ref", booking.reference); // simpan reference di card untuk keperluan delete
 
             card.innerHTML = `
-              <div class="card border-0 shadow-sm rounded-4 h-100 transition-hover position-relative overflow-hidden">
-                <!-- tombol hapus individual, muncul hanya saat card di-hover (diatur CSS di bawah) -->
-                <button class="btn btn-sm btn-outline-danger position-absolute delete-booking" 
+              <div class="card booking-history-card border-0 shadow-sm rounded-4 h-100 transition-hover position-relative">
+                <button class="btn btn-sm delete-booking" 
                         data-ref="${booking.reference}" 
-                        style="top: 12px; right: 12px; width: 32px; height: 32px; padding: 0; z-index: 10; font-size: 12px; transition: all 0.2s ease; border-radius: 50%;">
+                        style="position: absolute; top: -12px; right: -12px; width: 28px; height: 28px; border-radius: 50%; z-index: 10; background: white; border: 2px solid #dc3545; color: #dc3545; padding: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.2s ease;">
                   <i class="fas fa-trash-alt"></i>
                 </button>
                 <div class="card-body p-4">
                   <div class="d-flex justify-content-between align-items-center mb-3 pe-4">
                     <span class="badge bg-light text-primary-navy fw-bold border" style="color: var(--primary-navy) !important;">${booking.reference}</span>
                     <!-- timestamp dikonversi dari ISO string ke format tanggal lokal yang terbaca manusia -->
-                    <small class="text-muted">${new Date(booking.timestamp).toLocaleDateString()}</small>
+                    <small class="text-muted pe-4">${new Date(booking.timestamp).toLocaleDateString()}</small>
                   </div>
                   <h5 class="card-title mb-1">${booking.passengerName}</h5>
                   <p class="card-text text-muted small mb-3">
@@ -243,7 +242,7 @@
 
                 <!-- strip konfirmasi hapus — defaultnya tersembunyi (max-height: 0) -->
                 <!-- muncul dengan animasi slide-down saat tombol trash diklik -->
-                <div class="delete-confirm-strip bg-light border-top px-3 overflow-hidden" style="max-height: 0; transition: max-height 0.3s ease-out;">
+                <div class="delete-confirm-strip bg-light border-top px-3 overflow-hidden rounded-bottom-4" style="max-height: 0; transition: max-height 0.3s ease-out;">
                   <div class="d-flex justify-content-between align-items-center py-3">
                     <span class="small fw-bold text-danger">Delete this booking?</span>
                     <div class="d-flex gap-2">
@@ -270,12 +269,23 @@
           // klik tombol trash → tampilkan strip konfirmasi di bawah card, sembunyikan tombol trash
           document.querySelectorAll(".delete-booking").forEach((btn) => {
             btn.addEventListener("click", (e) => {
-              e.stopPropagation(); // cegah event naik ke elemen parent (mencegah trigger lain)
+              e.stopPropagation();
+
+              // Close ALL other strips first
+              document.querySelectorAll(".delete-confirm-strip").forEach((s) => {
+                s.style.maxHeight = "0";
+              });
+              document.querySelectorAll(".delete-booking").forEach((b) => {
+                b.style.opacity = "1";
+                b.style.pointerEvents = "auto";
+              });
+
+              // Then open only the clicked card's strip
               const card = btn.closest(".card");
               const strip = card.querySelector(".delete-confirm-strip");
-              strip.style.maxHeight = "100px"; // buka strip dengan animasi max-height
+              strip.style.maxHeight = "100px";
               btn.style.opacity = "0";
-              btn.style.pointerEvents = "none"; // nonaktifkan tombol trash selama strip terbuka
+              btn.style.pointerEvents = "none";
             });
           });
 
@@ -430,13 +440,14 @@
         background-color: var(--accent-gold);
         color: var(--primary-navy);
       }
-      /* tombol trash default opacity 0 (tidak terlihat), muncul saat card di-hover */
-      .card .delete-booking {
-        opacity: 0;
-        transition: opacity 0.2s ease;
+      /* delete button styling - always visible and floating */
+      .delete-booking {
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
-      .card:hover .delete-booking {
-        opacity: 1;
+      .delete-booking:hover {
+        background-color: #dc3545 !important;
+        color: white !important;
+        transform: scale(1.1);
       }
     </style>
   </body>

@@ -2,7 +2,7 @@
  * Flights Logic
  * Handles searching, filtering, and rendering flights
  */
-
+// ga pake alert tapi pakek innerhtml for notif jadi biso muncul tampilan static gitu di file itula tanpa libatke browser eksplisit
 // begitu dom content sudah di load which is thats why kito jugo taruh element script mepet diatas closing tag body yolah untuk tujuan ini, nah dari situ baru jalankan yang didalem kurung kurawal itu
 document.addEventListener("DOMContentLoaded", () => {
   // ambil semua data penerbangan dari flights-data.js — file itu diload duluan di HTML makanya bisa langsung diakses disini
@@ -18,29 +18,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const flightsContainer = document.getElementById("flightsContainer");
   const searchTitle = document.getElementById("searchTitle");
   const searchSubtitle = document.getElementById("searchSubtitle");
+  const popularRoutesPanel = document.getElementById("popularRoutesPanel");
+  const popularRoutesContainer = document.getElementById("popularRoutesContainer");
 
   /**
    * isi dropdown maskapai secara dinamis dari data yang ada
    * kenapa dinamis? biar kalau data berubah, dropdown ikut otomatis — ga perlu edit HTML manual
    */
   const populateAirlines = () => {
-    // Set() dipakai untuk hapus duplikat — kalau Qatar muncul 4x di data, dropdown tetap tampil sekali
+    // Set() dipakai untuk hapus duplikat — kalau Qatar muncul 4x di data, dropdown tetap tampil sekali, antisipasi fitur otomatis dropdown tadi sih intinyo
+    // map ambil semua nama maskapai
+    // set hapus duplikasi nama maskapai
+    // sort atur berdasar abjad yang di dropdown itu
     const airlines = [...new Set(allFlights.map((f) => f.airline))].sort();
+    // Sebelum diisi data baru, dropdown dikosongkan dulu dan disisakan satu pilihan default yaitu "All Airlines"
     airlineFilter.innerHTML = '<option value="all">All Airlines</option>';
     airlines.forEach((airline) => {
       const option = document.createElement("option");
+      // Ngasih "tanda" buat sistem (misal: value="qatar")
       option.value = airline;
+      // dituliskan si value tadi diwebnya sehingga bisa nampak di user
       option.innerText = airline;
       airlineFilter.appendChild(option);
     });
   };
 
   /**
-   * terima array flight, lalu cetak ke layar sebagai card HTML
-   * fungsi ini tidak tahu soal filter — tugasnya murni render apa yang dikasih
+   * terima array flight atau penerbangan, lalu cetak ke layar sebagai flight card
+   * fungsi ini tidak tahu soal CETAK filter — tugasnya murni render apa yang dikasih (terpisah dari fungsi filter)
    */
   const renderFlights = (flights) => {
-    // kosongkan container dulu sebelum isi ulang, biar hasil lama ga numpuk
+    // kosongkan container filter dulu sebelum isi ulang, biar hasil lama ga numpuk
     flightsContainer.innerHTML = "";
 
     // kalau hasil filter kosong, tampilkan pesan "tidak ada penerbangan"
@@ -131,11 +139,98 @@ document.addEventListener("DOMContentLoaded", () => {
         // simpan flight yang dipilih ke localStorage — ini cara "kirim data" ke halaman booking.html
         // booking.html nanti akan baca ini saat pertama kali dibuka
         const bookingInfo = {
+          // ambil segala rincian data
           ...selectedFlight,
           passengerCount: 1,
         };
+        // nyimpen di browser data dk ilang walau di refresh
+        // json string untuk simpen dlm format string krn  localStorage cmn bs simpn string
         localStorage.setItem("selectedFlight", JSON.stringify(bookingInfo));
         window.location.href = "booking.html";
+      });
+    });
+  };
+
+  /**
+   * Render Popular Routes (teaser cards)
+   */
+  const renderPopularRoutes = () => {
+    const routes = [
+      {
+        airline: "Qatar Airways",
+        logo: "https://img.favpng.com/10/19/15/qatar-airways-logo-airline-oryx-png-favpng-zzxmSycnu1dVBAvCSCDZEpwGU.jpg",
+        flightNumber: "QR947",
+        badge: "Most Booked",
+        badgeClass: "badge-most-booked",
+        originCode: "SIN",
+        originFlag: "https://flagcdn.com/w20/sg.png",
+        destCode: "CGK",
+        destFlag: "https://flagcdn.com/w20/id.png",
+        price: 310,
+        destName: "Indonesia"
+      },
+      {
+        airline: "Singapore Airlines",
+        logo: "https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Singapore_Airlines_Logo_2.svg/250px-Singapore_Airlines_Logo_2.svg.png",
+        flightNumber: "SQ211",
+        badge: "Best Deal",
+        badgeClass: "badge-best-deal",
+        originCode: "SIN",
+        originFlag: "https://flagcdn.com/w20/sg.png",
+        destCode: "SYD",
+        destFlag: "https://flagcdn.com/w20/au.png",
+        price: 1050,
+        destName: "Australia"
+      }
+    ];
+
+    popularRoutesContainer.innerHTML = routes.map(route => `
+      <div class="col-md-6">
+        <div class="card h-100 border-0 bg-light rounded-4 popular-route-card transition-hover overflow-hidden shadow-none border">
+          <div class="card-body p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="d-flex align-items-center">
+                <img src="${route.logo}" alt="Airline" width="25" class="me-2 rounded">
+                <div>
+                  <div class="fw-bold" style="font-size: 11px;">${route.airline}</div>
+                  <div class="text-muted" style="font-size: 10px;">${route.flightNumber}</div>
+                </div>
+              </div>
+              <span class="badge ${route.badgeClass} rounded-pill" style="font-size: 9px; padding: 5px 10px;">${route.badge}</span>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center my-3">
+              <div class="text-center">
+                <div class="fw-bold small">${route.originCode}</div>
+                <img src="${route.originFlag}" alt="SIN" style="width: 16px;">
+              </div>
+              <div class="flex-grow-1 mx-2 text-center position-relative">
+                <div class="border-bottom w-100"></div>
+                <i class="fas fa-plane position-absolute top-50 start-50 translate-middle bg-light px-1 text-muted" style="font-size: 10px;"></i>
+              </div>
+              <div class="text-center">
+                <div class="fw-bold small">${route.destCode}</div>
+                <img src="${route.destFlag}" alt="Dest" style="width: 16px;">
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+              <div>
+                <span class="text-muted" style="font-size: 10px; display: block;">from</span>
+                <span class="fw-bold text-gold" style="color: var(--accent-gold); font-size: 1.1rem;">S$ ${route.price}</span>
+              </div>
+              <button class="btn btn-sm btn-gold rounded-pill px-3 py-1 popular-view-btn" data-dest="${route.destName}">View</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join("");
+
+    // Add click listeners for "View" buttons
+    document.querySelectorAll(".popular-view-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        destinationSelect.value = btn.dataset.dest;
+        updateResults();
       });
     });
   };
@@ -182,7 +277,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // urutkan hasil sesuai pilihan sort — sort() langsung modifikasi array filtered
     if (sort === "priceLow") {
+      // a - b (Murah ke Mahal): Jika hasilnya negatif, a (murah) akan ditaruh di depan.
       filtered.sort((a, b) => a.pricePerPerson - b.pricePerPerson);
+      // b - a (Mahal ke Murah): Kebalikannya, ini akan menaruh angka yang lebih besar di awal daftar.
     } else if (sort === "priceHigh") {
       filtered.sort((a, b) => b.pricePerPerson - a.pricePerPerson);
     } else if (sort === "timeEarly") {
@@ -194,10 +291,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // kirim hasil filter ke fungsi render — dari sini tugasnya updateResults selesai
     renderFlights(filtered);
 
-    // update teks judul dan subtitle sesuai filter aktif
+    // update teks judul dan subtitle sesuai filter aktif angko data real time sesuai pilihan di form flight
     searchTitle.innerText = dest
       ? `Flights to ${dest}`
       : "All Available Flights";
+
+    // Panel disappears automatically once any filter is applied
+    const hasFilter = dest || date || airline !== "all";
+    if (hasFilter) {
+      popularRoutesPanel.classList.add("d-none");
+    } else {
+      popularRoutesPanel.classList.remove("d-none");
+      if (popularRoutesContainer.innerHTML === "") {
+        renderPopularRoutes();
+      }
+    }
 
     let subtitleParts = [];
     subtitleParts.push(date ? date : "all dates");
@@ -208,6 +316,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // jalankan setup awal: isi dropdown maskapai
   populateAirlines();
+
+  // Handle query parameters (e.g. ?destination=Indonesia)
+  const urlParams = new URLSearchParams(window.location.search);
+  const destParam = urlParams.get("destination");
+  if (destParam) {
+    destinationSelect.value = destParam;
+  }
 
   // langsung tampilkan semua flight saat halaman pertama dibuka
   updateResults();
