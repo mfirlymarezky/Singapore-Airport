@@ -55,9 +55,7 @@
       <!-- ≤750px: .history-heading-cluster digeser supaya teks/tombol selaras batas kiri kartu -->
       <div class="history-heading-cluster">
         <!-- row + col: sama gutter dengan baris #historyContainer (g-4) -->
-        <div
-          class="row g-4 gy-2 gy-md-0 align-items-md-center mb-3 mb-md-4"
-        >
+        <div class="row g-4 gy-2 gy-md-0 align-items-md-center mb-3 mb-md-4">
           <div class="col-12 col-md">
             <h2 class="mb-0">My Booking History</h2>
           </div>
@@ -165,7 +163,7 @@
             ><i class="fab fa-instagram"></i
           ></a>
         </div>
-        <p style="color: rgb(160, 174, 192)" class="small">
+        <p style="color: rgb(160, 174, 192)">
           &copy; 2026 Singapore Airport Website. All rights reserved.
         </p>
       </div>
@@ -285,9 +283,11 @@
               e.stopPropagation();
 
               // Close ALL other strips first
-              document.querySelectorAll(".delete-confirm-strip").forEach((s) => {
-                s.style.maxHeight = "0";
-              });
+              document
+                .querySelectorAll(".delete-confirm-strip")
+                .forEach((s) => {
+                  s.style.maxHeight = "0";
+                });
               document.querySelectorAll(".delete-booking").forEach((b) => {
                 b.style.opacity = "1";
                 b.style.pointerEvents = "auto";
@@ -381,7 +381,15 @@
                       <div class="small text-muted mb-1">${booking.route.replace(" to ", " → ")}</div>
                       <div class="small text-muted mb-2">Departure: ${booking.date} | ${booking.departureTime || "TBA"}</div>
                       <div class="small text-muted mb-3">Arrival: ${booking.arrivalDate || booking.date} | ${booking.arrivalTime || "TBA"}</div>
-                      <div class="small text-muted border-bottom pb-2 mb-2">Route Type: ${(booking.stopLabel || "Non-stop").replace(/KUL(?! \()/g, "KUL (Malaysia)").replace(/BKK(?! \()/g, "BKK (Thailand)").replace(/DOH(?! \()/g, "DOH (Qatar)").replace(/\(MY\)/g, "(Malaysia)").replace(/\(TH\)/g, "(Thailand)").replace(/\(QA\)/g, "(Qatar)")}</div>
+                      <div class="small text-muted border-bottom pb-2 mb-2">Route Type: ${(
+                        booking.stopLabel || "Non-stop"
+                      )
+                        .replace(/KUL(?! \()/g, "KUL (Malaysia)")
+                        .replace(/BKK(?! \()/g, "BKK (Thailand)")
+                        .replace(/DOH(?! \()/g, "DOH (Qatar)")
+                        .replace(/\(MY\)/g, "(Malaysia)")
+                        .replace(/\(TH\)/g, "(Thailand)")
+                        .replace(/\(QA\)/g, "(Qatar)")}</div>
                       <!-- tampilkan breakdown harga kalau lebih dari 1 penumpang, total saja kalau 1 -->
                       ${
                         booking.passengerCount > 1

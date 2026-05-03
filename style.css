@@ -1,39 +1,39 @@
 /* manggil library google font biar pacak narok font inter dan poppins di pemanggilan css */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
 
 /* CSS VARIABLES standarisasi efisiensi pemakaian kode, daripada repot nulis kode hex pada tiap elemen, lemak langsung panggil makek ini bae didalam si  class, jadi cak state custom color library bae sih */
 :root {
-    --primary-navy: #0a1628;
-    --secondary-navy: #152238;
-    --accent-gold: #f0a500;
-    --accent-gold-hover: #d18e00;
-    --text-light: #ffffff;
-    --text-muted: #a0aec0;
-    --bg-light: #f8fafc;
-    --card-bg: #ffffff;
-    --border-color: #cccccc;
-    /* validasi form booking: sama dengan border merah grup nomor telepon */
-    --form-invalid: #ff4d4d;
-    --form-invalid-rgb: 255, 77, 77;
-    /* pling kliatan pas hover berwarna. all nge state kondisi all berubah cak warno, 0.3 waktu animasi, ease pergerakan nyo yg smooth itu, dimulai dengan lambat, lalu cepat di tengah, dan melambat lagi di akhir. */
-    --transition: all 0.3s ease;
+  --primary-navy: #0a1628;
+  --secondary-navy: #152238;
+  --accent-gold: #f0a500;
+  --accent-gold-hover: #d18e00;
+  --text-light: #ffffff;
+  --text-muted: #a0aec0;
+  --bg-light: #f8fafc;
+  --card-bg: #ffffff;
+  --border-color: #cccccc;
+  /* validasi form booking: sama dengan border merah grup nomor telepon */
+  --form-invalid: #ff4d4d;
+  --form-invalid-rgb: 255, 77, 77;
+  /* pling kliatan pas hover berwarna. all nge state kondisi all berubah cak warno, 0.3 waktu animasi, ease pergerakan nyo yg smooth itu, dimulai dengan lambat, lalu cepat di tengah, dan melambat lagi di akhir. */
+  --transition: all 0.3s ease;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-light);
-    color: var(--primary-navy);
-    /* biar ktek opsi geser samping di body */
-    overflow-x: hidden;
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-light);
+  color: var(--primary-navy);
+  /* biar ktek opsi geser samping di body */
+  overflow-x: hidden;
 }
 
 .section-spacing {
-    padding-top: 80px !important;
-    padding-bottom: 80px !important;
+  padding-top: 80px !important;
+  padding-bottom: 80px !important;
 }
 
 .bg-primary-navy {
-    background-color: var(--primary-navy) !important;
+  background-color: var(--primary-navy) !important;
 }
 
 h1,
@@ -42,142 +42,144 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700 !important;
+  font-family: "Poppins", sans-serif;
+  font-weight: 700 !important;
 }
 
 /* Navbar Styling */
 .navbar {
-    background-color: var(--primary-navy) !important;
-    padding: 1rem 0;
-    /* [horizontal] [vertical] [blur] [color] */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: var(--primary-navy) !important;
+  padding: 1rem 0;
+  /* [horizontal] [vertical] [blur] [color] */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand {
-    /* weight ketebelan */
-    font-weight: 700;
-    font-size: 1.5rem;
-    /* !important biar overrule penerapan cascade */
-    color: var(--accent-gold) !important;
-    letter-spacing: 1px;
+  /* weight ketebelan */
+  font-weight: 700;
+  font-size: 1.5rem;
+  /* !important biar overrule penerapan cascade */
+  color: var(--accent-gold) !important;
+  letter-spacing: 1px;
 }
 
 .nav-link {
-    color: var(--text-light) !important;
-    font-weight: 500;
-    /* vertikal, hor */
-    margin: 0 10px;
-    transition: var(--transition);
+  color: var(--text-light) !important;
+  font-weight: 500;
+  /* vertikal, hor */
+  margin: 0 10px;
+  transition: var(--transition);
 }
 
 .nav-link:hover {
-    color: var(--accent-gold) !important;
+  color: var(--accent-gold) !important;
 }
 
 /* Hero Section */
 .hero-section {
-    /* relative means memang tujuannyo nak ditumpuk si img pesawat itu dengen judu dan deskripsi itu, kareno relative mengabaikan posisi yang lain istilahnyo tu */
-    position: relative;
-    min-height: 100vh;
-    /* gradien = pencampuran warna yg mano objek nyo yolah url pesawat */
-    background: linear-gradient(rgba(10, 22, 40, 0.7), rgba(10, 22, 40, 0.7)), url('https://images.unsplash.com/photo-1569154941061-e231b4725ef1?auto=format&fit=crop&q=80&w=2070');
-    /* atur gambar biar dak dipakso membesar disini (sizing) yolah dengan value cover */
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: var(--text-light);
-    padding: 0;
-    margin: 0;
+  /* relative means memang tujuannyo nak ditumpuk si img pesawat itu dengen judu dan deskripsi itu, kareno relative mengabaikan posisi yang lain istilahnyo tu */
+  position: relative;
+  min-height: 100vh;
+  /* gradien = pencampuran warna yg mano objek nyo yolah url pesawat */
+  background:
+    linear-gradient(rgba(10, 22, 40, 0.7), rgba(10, 22, 40, 0.7)),
+    url("https://images.unsplash.com/photo-1569154941061-e231b4725ef1?auto=format&fit=crop&q=80&w=2070");
+  /* atur gambar biar dak dipakso membesar disini (sizing) yolah dengan value cover */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--text-light);
+  padding: 0;
+  margin: 0;
 }
 
 .hero-content {
-    /* biar responsif saat layar keci dio jg menyusut menyesuaikan */
-    max-width: 800px;
+  /* biar responsif saat layar keci dio jg menyusut menyesuaikan */
+  max-width: 800px;
 }
 
 .hero-title {
-    font-size: 4rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    line-height: 1.1;
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
 }
 
 .hero-subtitle {
-    font-size: 1.15rem;
-    margin-bottom: 2.5rem;
-    color: var(--text-muted);
+  font-size: 1.15rem;
+  margin-bottom: 2.5rem;
+  color: var(--text-muted);
 }
 
 .form-label {
-    color: var(--text-light);
-    font-weight: 500;
+  color: var(--text-light);
+  font-weight: 500;
 }
 
 .form-control,
 .form-select {
-    background-color: rgba(255, 255, 255, 0.95);
-    border: 2px solid var(--border-color);
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    transition: var(--transition);
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 2px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  transition: var(--transition);
 }
 
 /* aksen gelep di form sampingan si oren */
 .form-control:focus,
 .form-select:focus {
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 0.25rem rgba(240, 165, 0, 0.25);
-    background-color: #ffffff;
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 0.25rem rgba(240, 165, 0, 0.25);
+  background-color: #ffffff;
 }
 
 .form-control.is-invalid,
 .form-select.is-invalid {
-    border-color: var(--form-invalid) !important;
+  border-color: var(--form-invalid) !important;
 }
 
 .form-control.is-invalid:focus,
 .form-select.is-invalid:focus {
-    border-color: var(--form-invalid) !important;
-    box-shadow: 0 0 0 0.25rem rgba(var(--form-invalid-rgb), 0.25);
-    background-color: #ffffff;
+  border-color: var(--form-invalid) !important;
+  box-shadow: 0 0 0 0.25rem rgba(var(--form-invalid-rgb), 0.25);
+  background-color: #ffffff;
 }
 
 textarea.form-control {
-    border: 2px solid var(--border-color);
+  border: 2px solid var(--border-color);
 }
 
 /* Unified Phone Input */
 .unified-phone-input {
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    transition: var(--transition);
-    background-color: #fff;
-    overflow: hidden;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  transition: var(--transition);
+  background-color: #fff;
+  overflow: hidden;
 }
 
 .unified-phone-input:focus-within {
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 0.25rem rgba(240, 165, 0, 0.25);
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 0.25rem rgba(240, 165, 0, 0.25);
 }
 
 /* Error: border merah saja (tanpa halo merah transparan); halo baru saat fokus seperti kolom lain */
 .unified-phone-input.is-invalid {
-    border-color: var(--form-invalid) !important;
-    box-shadow: none;
+  border-color: var(--form-invalid) !important;
+  box-shadow: none;
 }
 
 .unified-phone-input.is-invalid:focus-within {
-    box-shadow: 0 0 0 0.25rem rgba(var(--form-invalid-rgb), 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(var(--form-invalid-rgb), 0.25);
 }
 
 .unified-phone-input .form-select,
 .unified-phone-input .form-control {
-    border: none !important;
-    box-shadow: none !important;
-    height: 48px;
+  border: none !important;
+  box-shadow: none !important;
+  height: 48px;
 }
 
 /*
@@ -185,397 +187,422 @@ textarea.form-control {
  * (nama & email Passenger Details — lihat bootstrap.css baris invalid state).
  */
 .unified-phone-input.is-invalid #phone.form-control {
-    padding-right: calc(1.5em + 0.75rem);
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right calc(0.375em + 0.1875rem) center;
-    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+  padding-right: calc(1.5em + 0.75rem);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right calc(0.375em + 0.1875rem) center;
+  background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
 
 .unified-phone-input .form-select {
-    width: 90px !important;
-    flex: none !important;
-    border-right: 1px solid var(--border-color) !important;
-    border-radius: 0 !important;
-    background-position: right 0.5rem center;
-    padding-right: 1.5rem;
-    cursor: pointer;
+  width: 90px !important;
+  flex: none !important;
+  border-right: 1px solid var(--border-color) !important;
+  border-radius: 0 !important;
+  background-position: right 0.5rem center;
+  padding-right: 1.5rem;
+  cursor: pointer;
 }
 
 .unified-phone-input .form-control {
-    flex-grow: 1;
-    border-radius: 0 !important;
+  flex-grow: 1;
+  border-radius: 0 !important;
 }
 
 .btn-gold {
-    background-color: var(--accent-gold);
-    color: var(--primary-navy);
-    font-weight: 600;
-    padding: 0.75rem 2rem;
-    border-radius: 8px;
-    border: none;
-    transition: var(--transition);
-    color: white;
+  background-color: var(--accent-gold);
+  color: var(--primary-navy);
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  border: none;
+  transition: var(--transition);
+  color: white;
 }
 
 /* contohnyo di confirm & book now */
 .btn-gold:hover {
-    background-color: var(--accent-gold-hover);
-    color: #1a1a1a !important;
-    /* transformy geser kesumbu y which is disini makek -2px yang artinyo ke atas 2px */
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(240, 165, 0, 0.3);
+  background-color: var(--accent-gold-hover);
+  color: #1a1a1a !important;
+  /* transformy geser kesumbu y which is disini makek -2px yang artinyo ke atas 2px */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(240, 165, 0, 0.3);
 }
 
 /* Airport Achievment Cards */
 .stat-card {
-    background: var(--card-bg);
-    border-radius: 15px;
-    padding: 2rem;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    transition: var(--transition);
-    border: 1px solid #edf2f7;
-    height: 100%;
+  background: var(--card-bg);
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+  border: 1px solid #edf2f7;
+  height: 100%;
 }
 
 .stat-card:hover {
-    /* transform bemaen disini, keatas 10 px */
-    transform: translateY(-10px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  /* transform bemaen disini, keatas 10 px */
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
 }
 
 .stat-icon {
-    font-size: 2.5rem;
-    color: var(--accent-gold);
-    margin-bottom: 1rem;
+  font-size: 2.5rem;
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
 }
 
 .stat-number {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--primary-navy);
-    margin-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-navy);
+  margin-bottom: 0.5rem;
 }
 
 .stat-label {
-    color: var(--text-muted);
-    font-weight: 500;
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
 /* Flight Cards */
 .flight-card,
 .history-card {
-    background: var(--card-bg);
-    border-radius: 15px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    border-left: 5px solid var(--accent-gold);
-    transition: var(--transition);
+  background: var(--card-bg);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border-left: 5px solid var(--accent-gold);
+  transition: var(--transition);
 }
 
 /* simple effect for interactivity pas di hover di FLIGHT CARD scaling besarin 2 persen karena 102% yg mano default 100%*/
 .flight-card:hover {
-    transform: scale(1.02);
+  transform: scale(1.02);
 }
 
 .flight-time {
-    font-size: 1.25rem;
-    font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .flight-route {
-    color: var(--text-muted);
-    font-size: 0.9rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .flight-price {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--accent-gold);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-gold);
 }
 
 /* Footer */
 footer {
-    background-color: var(--primary-navy);
-    color: var(--text-light);
-    padding: 3rem 0;
-    margin-top: 5rem;
+  background-color: var(--primary-navy);
+  color: var(--text-light);
+  padding: 3rem 0;
+  margin-top: 5rem;
 }
 
 /* Validation Feedback */
 .error-message {
-    color: var(--form-invalid);
-    font-size: 0.85rem;
-    margin-top: 0.25rem;
-    display: none;
+  color: var(--form-invalid);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: none;
 }
 
-.is-invalid+.error-message {
-    display: block;
+.is-invalid + .error-message {
+  display: block;
 }
 
 /* Responsive adjustments */
 @media (max-width: 767px) {
-    .hero-title {
-        font-size: 1.7rem;
-        line-height: 1.1;
-    }
+  a.navbar-brand {
+    font-size: 1.1rem;
+  }
+  .hero-title {
+    font-size: 1.7rem;
+    line-height: 1.1;
+  }
 
-    .hero-subtitle {
-        font-size: 0.8rem;
-        max-width: 270px;
-    }
+  .hero-subtitle {
+    font-size: 0.8rem;
+    max-width: 270px;
+  }
 
-    .hero-section {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 0;
-        text-align: center;
-    }
+  .hero-section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
+    text-align: center;
+  }
 
-    .hero-section .hero-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+  .hero-section .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .hero-section .btn-gold {
-        width: fit-content;
-        font-size: 0.9rem;
-        padding: 0.6rem 1.5rem;
-    }
+  .hero-section .btn-gold {
+    width: fit-content;
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
+  }
 
-    .stat-card,
-    .booking-history-card {
-        margin-left: 1rem;
-        margin-right: 1rem;
-    }
+  .section-spacing {
+    padding: 20px !important;
+  }
 
-    h2.display-5 {
-        font-size: 1.7rem;
-    }
+  .stat-card,
+  .booking-history-card {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
 
-    .faq {
-        max-width: 100%;
-        text-align: center;
-    }
+  h2.display-5 {
+    font-size: 1.7rem;
+  }
 
-    .faq-section {
-        text-align: center !important;
-    }
+  h4,
+  h5 {
+    font-size: 0.9rem;
+  }
 
-    .faq-section .accordion-button,
-    .faq-section .accordion-body {
-        text-align: center !important;
-        justify-content: center !important;
-    }
+  select,
+  input,
+  label {
+    font-size: 0.9rem !important;
+  }
 
-    .faq-section .accordion-button::after {
-        margin-left: 10px;
-        position: absolute;
-        right: 20px;
-    }
+  .faq {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .faq-section {
+    text-align: center !important;
+  }
+
+  .faq-section .accordion-button,
+  .faq-section .accordion-body {
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  .faq-section .accordion-button::after {
+    margin-left: 10px;
+    position: absolute;
+    right: 20px;
+  }
+
+  footer p {
+    font-size: 0.7rem;
+  }
 }
 
 @media (min-width: 992px) {
-    .border-lg-start {
-        border-left: 1px solid var(--border-color) !important;
-    }
+  .border-lg-start {
+    border-left: 1px solid var(--border-color) !important;
+  }
 }
 
 .transition-hover {
-    transition: var(--transition);
+  transition: var(--transition);
 }
 
 .transition-hover:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
 
-    0%,
-    100% {
-        transform: translateX(0);
-    }
+  25% {
+    transform: translateX(-5px);
+  }
 
-    25% {
-        transform: translateX(-5px);
-    }
-
-    75% {
-        transform: translateX(5px);
-    }
+  75% {
+    transform: translateX(5px);
+  }
 }
 
 .shake {
-    animation: shake 0.2s ease-in-out 0s 2;
-    border-color: var(--form-invalid) !important;
-    box-shadow: 0 0 0 0.25rem rgba(var(--form-invalid-rgb), 0.25) !important;
+  animation: shake 0.2s ease-in-out 0s 2;
+  border-color: var(--form-invalid) !important;
+  box-shadow: 0 0 0 0.25rem rgba(var(--form-invalid-rgb), 0.25) !important;
 }
 
 /* Seat Tooltip Styling */
 .seat-tooltip {
-    position: absolute;
-    width: 280px;
-    z-index: 1050;
-    pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  position: absolute;
+  width: 280px;
+  z-index: 1050;
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
 }
 
 @media (min-width: 769px) {
-    .seat-tooltip {
-        left: 100%;
-        top: 0;
-        margin-left: 15px;
-        transform: translateX(15px);
-    }
+  .seat-tooltip {
+    left: 100%;
+    top: 0;
+    margin-left: 15px;
+    transform: translateX(15px);
+  }
 
-    .seat-tooltip.show {
-        opacity: 1 !important;
-        transform: translateX(0);
-    }
+  .seat-tooltip.show {
+    opacity: 1 !important;
+    transform: translateX(0);
+  }
 }
 
 @media (max-width: 768px) {
-    .seat-tooltip {
-        bottom: 100%;
-        left: 0;
-        width: 100%;
-        margin-bottom: 15px;
-        transform: translateY(15px);
-    }
+  .seat-tooltip {
+    bottom: 100%;
+    left: 0;
+    width: 100%;
+    margin-bottom: 15px;
+    transform: translateY(15px);
+  }
 
-    .seat-tooltip.show {
-        opacity: 1 !important;
-        transform: translateY(0);
-    }
+  .seat-tooltip.show {
+    opacity: 1 !important;
+    transform: translateY(0);
+  }
 }
 
 .seat-tooltip ul {
-    list-style: none;
-    padding-left: 0 !important;
+  list-style: none;
+  padding-left: 0 !important;
 }
 
 .seat-tooltip li {
-    position: relative;
-    padding-left: 1.2rem;
-    margin-bottom: 4px;
+  position: relative;
+  padding-left: 1.2rem;
+  margin-bottom: 4px;
 }
 
 .seat-tooltip li::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: var(--accent-gold);
-    font-weight: bold;
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--accent-gold);
+  font-weight: bold;
 }
 
 /* Accordion Styling */
 .accordion-item {
-    background-color: #ffffff !important;
-    border: 1px solid rgba(0,0,0,.125) !important;
+  background-color: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.125) !important;
 }
 
 .accordion-button {
-    background-color: #ffffff !important;
-    color: var(--primary-navy) !important;
-    font-weight: 600 !important;
-    box-shadow: none !important;
-    padding-right: 45px !important;
-    word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
+  background-color: #ffffff !important;
+  color: var(--primary-navy) !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  padding-right: 45px !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 .accordion-button:not(.collapsed) {
-    background-color: var(--primary-navy) !important;
-    color: var(--accent-gold) !important;
+  background-color: var(--primary-navy) !important;
+  color: var(--accent-gold) !important;
 }
 
 .accordion-button:focus {
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 0.25rem rgba(240, 165, 0, 0.25);
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 0.25rem rgba(240, 165, 0, 0.25);
 }
 
 /* Icon rotation behavior */
 .accordion-button::after {
-    filter: none !important;
-    transition: transform 0.3s ease;
+  filter: none !important;
+  transition: transform 0.3s ease;
 }
 
 .accordion-button:not(.collapsed)::after {
-    filter: brightness(0) invert(1) !important; /* Make icon white when expanded */
+  filter: brightness(0) invert(1) !important; /* Make icon white when expanded */
 }
 
 /* Route Badges */
 .badge-most-booked {
-    background: rgba(13, 110, 253, 0.15) !important;
-    color: #0d6efd !important;
-    border: 1px solid rgba(13, 110, 253, 0.3) !important;
+  background: rgba(13, 110, 253, 0.15) !important;
+  color: #0d6efd !important;
+  border: 1px solid rgba(13, 110, 253, 0.3) !important;
 }
 
 .badge-best-deal {
-    background: rgba(25, 135, 84, 0.15) !important;
-    color: #198754 !important;
-    border: 1px solid rgba(25, 135, 84, 0.3) !important;
+  background: rgba(25, 135, 84, 0.15) !important;
+  color: #198754 !important;
+  border: 1px solid rgba(25, 135, 84, 0.3) !important;
 }
 
 .badge-fastest {
-    background: rgba(255, 193, 7, 0.15) !important;
-    color: #cc8800 !important;
-    border: 1px solid rgba(255, 193, 7, 0.3) !important;
+  background: rgba(255, 193, 7, 0.15) !important;
+  color: #cc8800 !important;
+  border: 1px solid rgba(255, 193, 7, 0.3) !important;
 }
 
 /* Badge Tooltip */
 .badge-container {
-    display: inline-flex;
-    align-items: center;
-    position: relative;
-    cursor: help;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  cursor: help;
 }
 
 .badge-tooltip {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%) translateY(10px);
-    width: 220px;
-    background: white;
-    color: var(--primary-navy);
-    padding: 12px 15px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
-    z-index: 1050;
-    pointer-events: none;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    margin-bottom: 12px;
-    text-align: center;
-    font-size: 0.8rem;
-    font-weight: 500;
-    border: 1px solid rgba(0,0,0,0.05);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  width: 220px;
+  background: white;
+  color: var(--primary-navy);
+  padding: 12px 15px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+  z-index: 1050;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .badge-tooltip.show {
-    opacity: 1 !important;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
+  opacity: 1 !important;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
 }
 
 /* Arrow for tooltip */
 .badge-tooltip::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 6px;
-    border-style: solid;
-    border-color: white transparent transparent transparent;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
 }
