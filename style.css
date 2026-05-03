@@ -12,6 +12,9 @@
     --bg-light: #f8fafc;
     --card-bg: #ffffff;
     --border-color: #cccccc;
+    /* validasi form booking: sama dengan border merah grup nomor telepon */
+    --form-invalid: #ff4d4d;
+    --form-invalid-rgb: 255, 77, 77;
     /* pling kliatan pas hover berwarna. all nge state kondisi all berubah cak warno, 0.3 waktu animasi, ease pergerakan nyo yg smooth itu, dimulai dengan lambat, lalu cepat di tengah, dan melambat lagi di akhir. */
     --transition: all 0.3s ease;
 }
@@ -130,6 +133,18 @@ h6 {
     background-color: #ffffff;
 }
 
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: var(--form-invalid) !important;
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+    border-color: var(--form-invalid) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--form-invalid-rgb), 0.25);
+    background-color: #ffffff;
+}
+
 textarea.form-control {
     border: 2px solid var(--border-color);
 }
@@ -146,6 +161,16 @@ textarea.form-control {
 .unified-phone-input:focus-within {
     border-color: var(--accent-gold);
     box-shadow: 0 0 0 0.25rem rgba(240, 165, 0, 0.25);
+}
+
+/* Error: border merah saja (tanpa halo merah transparan); halo baru saat fokus seperti kolom lain */
+.unified-phone-input.is-invalid {
+    border-color: var(--form-invalid) !important;
+    box-shadow: none;
+}
+
+.unified-phone-input.is-invalid:focus-within {
+    box-shadow: 0 0 0 0.25rem rgba(var(--form-invalid-rgb), 0.25);
 }
 
 .unified-phone-input .form-select,
@@ -269,7 +294,7 @@ footer {
 
 /* Validation Feedback */
 .error-message {
-    color: #ff4d4d;
+    color: var(--form-invalid);
     font-size: 0.85rem;
     margin-top: 0.25rem;
     display: none;
@@ -377,8 +402,8 @@ footer {
 
 .shake {
     animation: shake 0.2s ease-in-out 0s 2;
-    border-color: #ff4d4d !important;
-    box-shadow: 0 0 0 0.25rem rgba(255, 77, 77, 0.25) !important;
+    border-color: var(--form-invalid) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--form-invalid-rgb), 0.25) !important;
 }
 
 /* Seat Tooltip Styling */

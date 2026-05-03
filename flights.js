@@ -87,10 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="text-center">
                 <div class="flight-time h5 mb-0" style="font-weight: 700;">${flight.arrivalTime}</div>
                 <div class="flight-route small">
-                  <img src="${flight.destinationFlag}" alt="Flag" class="me-1" style="width: 20px; vertical-align: middle;">
+                  <img src="${flight.destinationFlag}" alt="${flight.destinationCode}" class="me-1" style="width: 20px; vertical-align: middle;">
                   ${flight.destinationCode} (${flight.destination})
                 </div>
-                <div class="small text-muted">${flight.date}</div>
+                <div class="small text-muted">${flight.arrivalDate || flight.date}</div>
               </div>
             </div>
           </div>
@@ -173,15 +173,20 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="col-md-6">
         <div class="card h-100 border-0 bg-light rounded-4 popular-route-card transition-hover overflow-hidden shadow-none border">
           <div class="card-body p-3">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <div class="d-flex align-items-center">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div class="d-flex align-items-center mt-1">
                 <img src="${route.logo}" alt="Airline" width="25" class="me-2 rounded">
                 <div>
                   <div class="fw-bold" style="font-size: 11px;">${route.airline}</div>
                   <div class="text-muted" style="font-size: 10px;">${route.flightNumber}</div>
                 </div>
               </div>
-              <span class="badge ${route.badgeClass} rounded-pill" style="font-size: 9px; padding: 5px 10px;">${route.badge}</span>
+              <div class="text-end">
+                <div class="mb-1">
+                  <span class="badge ${route.badgeClass} rounded-pill" style="font-size: 9px; padding: 5px 10px;">${route.badge}</span>
+                </div>
+                <div class="fw-bold" style="color: var(--accent-gold); font-size: 1.1rem; line-height: 1;">S$ ${route.price}</div>
+              </div>
             </div>
             
             <div class="d-flex justify-content-between align-items-center my-3">
@@ -199,11 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mt-3">
-              <div>
-                <span class="text-muted" style="font-size: 10px; display: block;">from</span>
-                <span class="fw-bold text-gold" style="color: var(--accent-gold); font-size: 1.1rem;">S$ ${route.price}</span>
-              </div>
+            <div class="d-flex justify-content-end align-items-center mt-3">
               <button class="btn btn-sm btn-gold rounded-pill px-3 py-1 popular-view-btn" data-dest="${route.destName}">View</button>
             </div>
           </div>
@@ -292,12 +293,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    let subtitleParts = [];
-    if (date) subtitleParts.push(date);
-    else subtitleParts.push("all dates");
+    let destText = dest ? ` to ${dest}` : " (all destinations)";
+    let dateText = date ? date : "all dates";
+    let filterText = sortSelect.options[sortSelect.selectedIndex].text;
+
+    let subtitleString = dest ? `Showing ${filtered.length} flight(s) to ${dest}, ${dateText}, ${filterText}` : `Showing ${filtered.length} flight(s), all destinations, ${dateText}, ${filterText}`;
 
     if (searchSubtitle) {
-      searchSubtitle.innerText = `Showing ${filtered.length} flight(s) (${subtitleParts.join(", ")})`;
+      searchSubtitle.innerText = subtitleString;
     }
   };
 

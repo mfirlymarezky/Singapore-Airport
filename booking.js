@@ -97,6 +97,41 @@ document.addEventListener("DOMContentLoaded", () => {
   // set jumlah penumpang awal dari data yang dikirim flights.js
   numPassengers.value = selectedFlight.passengerCount;
 
+  // pulihkan data form jika ada di sessionStorage (agar tidak hilang saat refresh)
+  const savedForm = JSON.parse(sessionStorage.getItem("bookingFormData"));
+  if (savedForm) {
+    if (savedForm.fullName)
+      document.getElementById("fullName").value = savedForm.fullName;
+    if (savedForm.email)
+      document.getElementById("email").value = savedForm.email;
+    if (savedForm.phoneCode)
+      document.getElementById("phoneCode").value = savedForm.phoneCode;
+    if (savedForm.phone)
+      document.getElementById("phone").value = savedForm.phone;
+    if (savedForm.seatClass) seatClass.value = savedForm.seatClass;
+    if (savedForm.numPassengers) numPassengers.value = savedForm.numPassengers;
+    if (savedForm.mealPreference)
+      document.getElementById("mealPreference").value =
+        savedForm.mealPreference;
+  }
+
+  // simpan otomatis form data ke sessionStorage setiap kali ada perubahan
+  const saveFormData = () => {
+    const data = {
+      fullName: document.getElementById("fullName").value,
+      email: document.getElementById("email").value,
+      phoneCode: document.getElementById("phoneCode").value,
+      phone: document.getElementById("phone").value,
+      seatClass: seatClass.value,
+      numPassengers: numPassengers.value,
+      mealPreference: document.getElementById("mealPreference").value,
+    };
+    sessionStorage.setItem("bookingFormData", JSON.stringify(data));
+  };
+
+  bookingForm.addEventListener("input", saveFormData);
+  bookingForm.addEventListener("change", saveFormData);
+
   /**
    * cetak ringkasan flight di bagian atas form booking
    * data diambil dari selectedFlight yang sudah dibaca dari localStorage di atas
@@ -109,9 +144,10 @@ document.addEventListener("DOMContentLoaded", () => {
           <div class="text-muted small">${selectedFlight.flightNumber}</div>
         </div>
         <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
-          <div class="h5 mb-0">${selectedFlight.originCode} (${selectedFlight.origin}) &rarr; ${selectedFlight.destinationCode} (${selectedFlight.destination})</div>
-          <div class="text-muted small">Date: ${selectedFlight.date} | Departure: ${selectedFlight.departureTime}</div>
-          <div class="text-muted small">${selectedFlight.stopLabel}</div>
+          <div class="h5 mb-2">${selectedFlight.originCode} (${selectedFlight.origin}) → ${selectedFlight.destinationCode} (${selectedFlight.destination})</div>
+          <div class="text-muted small mb-2">Departure: ${selectedFlight.date} | ${selectedFlight.departureTime}</div>
+          <div class="text-muted small mb-2">Arrival: ${selectedFlight.arrivalDate || selectedFlight.date} | ${selectedFlight.arrivalTime}</div>
+          <div class="text-muted small mt-2">${selectedFlight.stopLabel}</div>
         </div>
       </div>
     `;
@@ -217,17 +253,41 @@ document.addEventListener("DOMContentLoaded", () => {
   // update harga otomatis setiap kali jumlah penumpang berubah
   numPassengers.addEventListener("input", updateTotalPrice);
 
+  // fitur reset form: membersihkan input, validasi, dan sessionStorage
+  const resetFormBtn = document.getElementById("resetFormBtn");
+  if (resetFormBtn) {
+    resetFormBtn.addEventListener("click", () => {
+      bookingForm.reset();
+      // Kembalikan ke jumlah penumpang default dari pilihan flight sebelumnya
+      numPassengers.value = selectedFlight.passengerCount;
+      // Hapus data yang disimpan
+      sessionStorage.removeItem("bookingFormData");
+      // Hapus styling error validasi
+      const fields = ["fullName", "email", "phone"];
+      fields.forEach((fieldId) => {
+        const el = document.getElementById(fieldId);
+        el.classList.remove("is-invalid", "shake");
+        if (fieldId === "phone") {
+          const group = el.closest(".unified-phone-input");
+          if (group) group.classList.remove("is-invalid", "shake");
+        }
+      });
+      // Hitung ulang harga sesuai state form yang sudah reset
+      updateTotalPrice();
+    });
+  }
+
   /**
    * Phone Code Dropdown: Show full name in list, show only code when selected.
    */
   const fullPhoneLabels = {
     "+65": "🇸🇬 +65 Singapore",
     "+62": "🇮🇩 +62 Indonesia",
-    "+61": "🇦🇺 +61 Australia"
+    "+61": "🇦🇺 +61 Australia",
   };
 
   const updatePhoneCodeDisplay = (isFull) => {
-    Array.from(phoneCode.options).forEach(opt => {
+    Array.from(phoneCode.options).forEach((opt) => {
       opt.text = isFull ? fullPhoneLabels[opt.value] : opt.value;
     });
   };
@@ -235,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // When focused/clicked, show full text so the list is readable
   phoneCode.addEventListener("mousedown", () => updatePhoneCodeDisplay(true));
   phoneCode.addEventListener("focus", () => updatePhoneCodeDisplay(true));
-  
+
   // When changed or blurred, show only the short code
   phoneCode.addEventListener("change", () => updatePhoneCodeDisplay(false));
   phoneCode.addEventListener("blur", () => updatePhoneCodeDisplay(false));
@@ -266,13 +326,15 @@ document.addEventListener("DOMContentLoaded", () => {
       seatClass: seatClass.value,
       passengerCount: priceData.count,
       mealPreference,
-      route: `${selectedFlight.originCode} (${selectedFlight.origin}) to ${selectedFlight.destinationCode} (${selectedFlight.destination})`,
+      route: `${selectedFlight.originCode} (${selectedFlight.origin}) → ${selectedFlight.destinationCode} (${selectedFlight.destination})`,
       date: selectedFlight.date,
       totalPrice: priceData.total,
       priceBreakdown: priceData.breakdown,
       airline: selectedFlight.airline,
       flightNumber: selectedFlight.flightNumber,
       departureTime: selectedFlight.departureTime,
+      arrivalTime: selectedFlight.arrivalTime,
+      arrivalDate: selectedFlight.arrivalDate || selectedFlight.date,
       stops: selectedFlight.stops,
       stopLabel: selectedFlight.stopLabel,
       timestamp: new Date().toISOString(), // waktu booking dibuat, ditampilkan di history.html
@@ -289,19 +351,13 @@ document.addEventListener("DOMContentLoaded", () => {
     confName.innerText = fullName;
     confNameLabel.innerText =
       priceData.count > 1 ? "Lead Passenger:" : "Passenger:";
-    confCount.innerText = `${priceData.count} Person(s)`;
-    confRoute.innerHTML = `${selectedFlight.originCode} (${selectedFlight.origin}) &rarr; ${selectedFlight.destinationCode} (${selectedFlight.destination})`;
-    confDepartureDate.innerText = selectedFlight.date;
-    confDepartureTime.innerText = selectedFlight.departureTime;
-
-    document.getElementById("confBasePrice").innerText =
-      `S$ ${priceData.basePrice.toLocaleString()}`;
-    document.getElementById("confSeatClass").innerText =
-      priceData.multiplier === 1.0 
-        ? `${priceData.classLabel}` 
-        : `${priceData.classLabel} (×${priceData.multiplier})`;
-    document.getElementById("confCountDetail").innerText =
-      `${priceData.count} Passenger(s)`;
+    confRoute.innerHTML = `${selectedFlight.originCode} (${selectedFlight.origin}) → ${selectedFlight.destinationCode} (${selectedFlight.destination})`;
+    document.getElementById("confStopLabel").innerText =
+      selectedFlight.stopLabel;
+    document.getElementById("confDepartureFull").innerText =
+      `${selectedFlight.date} | ${selectedFlight.departureTime}`;
+    document.getElementById("confArrivalFull").innerText =
+      `${selectedFlight.arrivalDate || selectedFlight.date} | ${selectedFlight.arrivalTime}`;
     confPrice.innerText = `S$ ${priceData.total.toLocaleString()}`;
 
     // sembunyikan form, tampilkan kartu konfirmasi
@@ -310,6 +366,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // hapus data flight terpilih dari localStorage — sudah tidak dibutuhkan setelah booking selesai
     localStorage.removeItem("selectedFlight");
+
+    // hapus data form dari session storage agar form kosong untuk booking berikutnya
+    sessionStorage.removeItem("bookingFormData");
 
     window.scrollTo({ top: 0, behavior: "smooth" });
     confirmModal.hide();
@@ -326,6 +385,10 @@ document.addEventListener("DOMContentLoaded", () => {
     fields.forEach((fieldId) => {
       const el = document.getElementById(fieldId);
       el.classList.remove("is-invalid", "shake");
+      if (fieldId === "phone") {
+        const group = el.closest(".unified-phone-input");
+        if (group) group.classList.remove("is-invalid", "shake");
+      }
 
       let isFieldValid = true;
 
@@ -343,14 +406,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (!isFieldValid) {
-        el.classList.add("is-invalid", "shake");
-        const errorMsg = el.nextElementSibling;
-        if (fieldId === "phone" && errorMsg && errorMsg.classList.contains("error-message")) {
-          errorMsg.innerText = "Please enter a valid phone number";
+        if (fieldId === "phone") {
+          const group = el.closest(".unified-phone-input");
+          if (group) group.classList.add("is-invalid", "shake");
+          const errorMsg = group?.nextElementSibling;
+          if (errorMsg?.classList.contains("error-message")) {
+            errorMsg.innerText = "Please enter a valid phone number";
+          }
+          setTimeout(() => group?.classList.remove("shake"), 500);
+        } else {
+          el.classList.add("is-invalid", "shake");
+          setTimeout(() => el.classList.remove("shake"), 500);
         }
+
         isValid = false;
         if (!firstInvalid) firstInvalid = el;
-        setTimeout(() => el.classList.remove("shake"), 500);
       }
     });
 
@@ -367,14 +437,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     modalSummary.innerHTML = `
       <div class="row g-2 small">
-        <div class="col-6 text-muted">Lead Passenger:</div>
+        <div class="col-6 text-muted">${priceData.count > 1 ? "Lead Passenger:" : "Full Name:"}</div>
         <div class="col-6 text-end fw-bold">${fullName}</div>
         <div class="col-6 text-muted">Route:</div>
-        <div class="col-6 text-end fw-bold">${selectedFlight.originCode} (${selectedFlight.origin}) &rarr; ${selectedFlight.destinationCode} (${selectedFlight.destination})</div>
-        <div class="col-6 text-muted">Date:</div>
-        <div class="col-6 text-end fw-bold">${selectedFlight.date}</div>
-        <div class="col-6 text-muted">Seat Class:</div>
-        <div class="col-6 text-end fw-bold text-capitalize">${priceData.classLabel}</div>
+        <div class="col-6 text-end fw-bold">${selectedFlight.originCode} (${selectedFlight.origin}) → ${selectedFlight.destinationCode} (${selectedFlight.destination})</div>
+        <div class="col-6 text-muted">Route Type:</div>
+        <div class="col-6 text-end fw-bold">${selectedFlight.stopLabel}</div>
+        <div class="col-6 text-muted">Departure:</div>
+        <div class="col-6 text-end fw-bold">${selectedFlight.date} | ${selectedFlight.departureTime}</div>
+        <div class="col-6 text-muted">Arrival:</div>
+        <div class="col-6 text-end fw-bold">${selectedFlight.arrivalDate || selectedFlight.date} | ${selectedFlight.arrivalTime}</div>
       </div>
     `;
 
@@ -386,7 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <td class="text-end fw-bold">S$ ${priceData.basePrice.toLocaleString()}</td>
           </tr>
           <tr>
-            <td class="text-muted">Seat class multiplier</td>
+            <td class="text-muted">Seat class multiplier (${priceData.classLabel})</td>
             <td class="text-end fw-bold">×${priceData.multiplier}</td>
           </tr>
           <tr>
