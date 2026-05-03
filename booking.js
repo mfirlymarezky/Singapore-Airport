@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
       `${selectedFlight.date} | ${selectedFlight.departureTime}`;
     document.getElementById("confArrivalFull").innerText =
       `${selectedFlight.arrivalDate || selectedFlight.date} | ${selectedFlight.arrivalTime}`;
-    confPrice.innerText = `S$ ${priceData.total.toLocaleString()}`;
+    confPrice.innerText = `S$\u00A0${priceData.total.toLocaleString()}`;
 
     // sembunyikan form, tampilkan kartu konfirmasi
     mainContent.classList.add("d-none");
@@ -467,7 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </tr>
           <tr class="border-top">
             <td class="pt-2 fw-bold">Total</td>
-            <td class="pt-2 text-end fw-bold text-gold h5 mb-0">S$ ${priceData.total.toLocaleString()}</td>
+            <td class="pt-2 text-end fw-bold text-gold h5 mb-0 text-nowrap">S$&nbsp;${priceData.total.toLocaleString()}</td>
           </tr>
         </tbody>
       </table>

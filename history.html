@@ -51,13 +51,23 @@
     </nav>
 
     <!-- ======== MAIN CONTENT ======== -->
-    <div class="container py-5">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">My Booking History</h2>
-        <!-- tombol ini trigger modal konfirmasi "Clear All", bukan langsung hapus -->
-        <button id="clearHistory" class="btn btn-outline-danger">
-          <i class="fas fa-trash-alt me-2"></i>Clear History
-        </button>
+    <div class="container py-5 history-page-wrap">
+      <!-- ≤750px: .history-heading-cluster digeser supaya teks/tombol selaras batas kiri kartu -->
+      <div class="history-heading-cluster">
+        <!-- row + col: sama gutter dengan baris #historyContainer (g-4) -->
+        <div
+          class="row g-4 gy-2 gy-md-0 align-items-md-center mb-3 mb-md-4"
+        >
+          <div class="col-12 col-md">
+            <h2 class="mb-0">My Booking History</h2>
+          </div>
+          <div class="col-12 col-md-auto ms-md-auto">
+            <!-- tombol ini trigger modal konfirmasi "Clear All", bukan langsung hapus -->
+            <button id="clearHistory" class="btn btn-outline-danger">
+              <i class="fas fa-trash-alt me-2"></i>Clear History
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- container kosong yang akan diisi oleh renderHistory() saat halaman dibuka -->
@@ -457,6 +467,24 @@
         background-color: #dc3545 !important;
         color: white !important;
         transform: scale(1.1);
+      }
+      /* Layar kecil: judul & kartu tidak mepet ke tepi layar */
+      @media (max-width: 767.98px) {
+        .history-page-wrap {
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
+        }
+      }
+
+      /*
+        ≤750px: baris kartu pakai gutter g-4; row kartu geser ±½ gutter dari tepi konten kontainer.
+        Tanpa ini, blok judul terasa lebih “kiri” dari tepi fisik kartu.
+        Margin-kiri = ½ gutter (sama dengan padding horizontal kolom .row di Bootstrap).
+      */
+      @media (max-width: 750px) {
+        .history-page-wrap .history-heading-cluster {
+          margin-left: calc(var(--bs-gutter-x, 1.5rem) * 0.5);
+        }
       }
     </style>
   </body>
