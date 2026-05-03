@@ -33,6 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const confNameLabel = document.getElementById("confNameLabel");
   const confCount = document.getElementById("confCount");
   const confRoute = document.getElementById("confRoute");
+  const confDepartureTime = document.getElementById("confDepartureTime");
+  const confDepartureDate = document.getElementById("confDepartureDate");
   const confPrice = document.getElementById("confPrice");
 
   // elemen modal konfirmasi yang muncul sebelum booking final diproses
@@ -109,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
           <div class="h5 mb-0">${selectedFlight.originCode} (${selectedFlight.origin}) &rarr; ${selectedFlight.destinationCode} (${selectedFlight.destination})</div>
           <div class="text-muted small">Date: ${selectedFlight.date} | Departure: ${selectedFlight.departureTime}</div>
+          <div class="text-muted small">${selectedFlight.stopLabel}</div>
         </div>
       </div>
     `;
@@ -131,11 +134,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (count > 1) {
       passengerLabel.innerText = "Lead Passenger Name";
       leadSubtitle.classList.remove("d-none"); // tampilkan keterangan "booking atas nama..."
-      priceBreakdown.innerHTML = `${count} passengers &times; S$ ${basePrice.toLocaleString()} &times; ${multiplier} (${classLabel})`;
+      if (selectedClass === "economy") {
+        priceBreakdown.innerHTML = `${count} passengers &times; S$ ${basePrice.toLocaleString()}`;
+      } else {
+        priceBreakdown.innerHTML = `${count} passengers &times; S$ ${basePrice.toLocaleString()} &times; ${multiplier} (${classLabel})`;
+      }
     } else {
       passengerLabel.innerText = "Full Name (as in Passport)";
       leadSubtitle.classList.add("d-none"); // sembunyikan keterangan lead passenger kalau cuma 1 orang
-      priceBreakdown.innerText = `S$ ${total.toLocaleString()} total (×${multiplier} ${classLabel})`;
+      if (selectedClass === "economy") {
+        priceBreakdown.innerText = `S$ ${total.toLocaleString()} total`;
+      } else {
+        priceBreakdown.innerText = `S$ ${total.toLocaleString()} total (×${multiplier} ${classLabel})`;
+      }
     }
 
     totalPriceDisplay.innerText = `S$ ${total.toLocaleString()}`;
@@ -262,6 +273,8 @@ document.addEventListener("DOMContentLoaded", () => {
       airline: selectedFlight.airline,
       flightNumber: selectedFlight.flightNumber,
       departureTime: selectedFlight.departureTime,
+      stops: selectedFlight.stops,
+      stopLabel: selectedFlight.stopLabel,
       timestamp: new Date().toISOString(), // waktu booking dibuat, ditampilkan di history.html
     };
 
@@ -278,11 +291,15 @@ document.addEventListener("DOMContentLoaded", () => {
       priceData.count > 1 ? "Lead Passenger:" : "Passenger:";
     confCount.innerText = `${priceData.count} Person(s)`;
     confRoute.innerHTML = `${selectedFlight.originCode} (${selectedFlight.origin}) &rarr; ${selectedFlight.destinationCode} (${selectedFlight.destination})`;
+    confDepartureDate.innerText = selectedFlight.date;
+    confDepartureTime.innerText = selectedFlight.departureTime;
 
     document.getElementById("confBasePrice").innerText =
       `S$ ${priceData.basePrice.toLocaleString()}`;
     document.getElementById("confSeatClass").innerText =
-      `${priceData.classLabel} (×${priceData.multiplier})`;
+      priceData.multiplier === 1.0 
+        ? `${priceData.classLabel}` 
+        : `${priceData.classLabel} (×${priceData.multiplier})`;
     document.getElementById("confCountDetail").innerText =
       `${priceData.count} Passenger(s)`;
     confPrice.innerText = `S$ ${priceData.total.toLocaleString()}`;

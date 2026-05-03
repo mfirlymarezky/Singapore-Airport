@@ -24,6 +24,11 @@ body {
     overflow-x: hidden;
 }
 
+.section-spacing {
+    padding-top: 80px !important;
+    padding-bottom: 80px !important;
+}
+
 .bg-primary-navy {
     background-color: var(--primary-navy) !important;
 }
@@ -49,7 +54,7 @@ h6 {
 .navbar-brand {
     /* weight ketebelan */
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     /* !important biar overrule penerapan cascade */
     color: var(--accent-gold) !important;
     letter-spacing: 1px;
@@ -179,6 +184,7 @@ textarea.form-control {
 /* contohnyo di confirm & book now */
 .btn-gold:hover {
     background-color: var(--accent-gold-hover);
+    color: #1a1a1a !important;
     /* transformy geser kesumbu y which is disini makek -2px yang artinyo ke atas 2px */
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(240, 165, 0, 0.3);
@@ -317,8 +323,24 @@ footer {
     }
 
     .faq {
-        max-width: 300px;
+        max-width: 100%;
         text-align: center;
+    }
+
+    .faq-section {
+        text-align: center !important;
+    }
+
+    .faq-section .accordion-button,
+    .faq-section .accordion-body {
+        text-align: center !important;
+        justify-content: center !important;
+    }
+
+    .faq-section .accordion-button::after {
+        margin-left: 10px;
+        position: absolute;
+        right: 20px;
     }
 }
 
@@ -418,9 +440,24 @@ footer {
 }
 
 /* Accordion Styling */
+.accordion-item {
+    background-color: #ffffff !important;
+    border: 1px solid rgba(0,0,0,.125) !important;
+}
+
+.accordion-button {
+    background-color: #ffffff !important;
+    color: var(--primary-navy) !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+    padding-right: 45px !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+}
+
 .accordion-button:not(.collapsed) {
-    background-color: var(--primary-navy);
-    color: var(--accent-gold);
+    background-color: var(--primary-navy) !important;
+    color: var(--accent-gold) !important;
 }
 
 .accordion-button:focus {
@@ -428,12 +465,14 @@ footer {
     box-shadow: 0 0 0 0.25rem rgba(240, 165, 0, 0.25);
 }
 
+/* Icon rotation behavior */
 .accordion-button::after {
-    filter: brightness(0) invert(1);
+    filter: none !important;
+    transition: transform 0.3s ease;
 }
 
-.accordion-button.collapsed::after {
-    filter: none;
+.accordion-button:not(.collapsed)::after {
+    filter: brightness(0) invert(1) !important; /* Make icon white when expanded */
 }
 
 /* Route Badges */
@@ -447,4 +486,59 @@ footer {
     background: rgba(25, 135, 84, 0.15) !important;
     color: #198754 !important;
     border: 1px solid rgba(25, 135, 84, 0.3) !important;
+}
+
+.badge-fastest {
+    background: rgba(255, 193, 7, 0.15) !important;
+    color: #cc8800 !important;
+    border: 1px solid rgba(255, 193, 7, 0.3) !important;
+}
+
+/* Badge Tooltip */
+.badge-container {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    cursor: help;
+}
+
+.badge-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    width: 220px;
+    background: white;
+    color: var(--primary-navy);
+    padding: 12px 15px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+    z-index: 1050;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    margin-bottom: 12px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.badge-tooltip.show {
+    opacity: 1 !important;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Arrow for tooltip */
+.badge-tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: white transparent transparent transparent;
 }

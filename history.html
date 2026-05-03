@@ -220,10 +220,13 @@
                   <i class="fas fa-trash-alt"></i>
                 </button>
                 <div class="card-body p-4">
-                  <div class="d-flex justify-content-between align-items-center mb-3 pe-4">
+                  <div class="d-flex justify-content-between align-items-start mb-3">
                     <span class="badge bg-light text-primary-navy fw-bold border" style="color: var(--primary-navy) !important;">${booking.reference}</span>
                     <!-- timestamp dikonversi dari ISO string ke format tanggal lokal yang terbaca manusia -->
-                    <small class="text-muted pe-4">${new Date(booking.timestamp).toLocaleDateString()}</small>
+                    <!-- ditaruh di top right dengan padding kanan agar tidak overlap dengan trash icon -->
+                    <small class="text-muted pe-3 text-end" style="font-size: 0.75rem;">
+                      Ordered on:<br>${new Date(booking.timestamp).toLocaleDateString()}
+                    </small>
                   </div>
                   <h5 class="card-title mb-1">${booking.passengerName}</h5>
                   <p class="card-text text-muted small mb-3">
@@ -231,7 +234,7 @@
                   </p>
                   <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-auto">
                     <div class="small">
-                      <span class="text-muted">Date:</span> <strong>${booking.date}</strong>
+                      <span class="text-muted">Departure Date:</span> <strong>${booking.date}</strong>
                     </div>
                     <!-- data-ref dipakai event listener di bawah untuk tahu booking mana yang mau ditampilkan -->
                     <button class="btn btn-sm btn-outline-gold view-details" data-ref="${booking.reference}">
@@ -366,13 +369,18 @@
                         <span class="text-gold fw-bold">S$ ${booking.totalPrice.toLocaleString()}</span>
                       </div>
                       <div class="small text-muted mb-1">${booking.route}</div>
-                      <div class="small text-muted border-bottom pb-2 mb-2">Departure: ${booking.date} at ${booking.departureTime || "TBA"}</div>
+                      <div class="small text-muted">Departure: ${booking.date} at ${booking.departureTime || "TBA"}</div>
+                      <div class="small text-muted border-bottom pb-2 mb-2">Route Type: ${booking.stopLabel || "Non-stop"}</div>
                       <!-- tampilkan breakdown harga kalau lebih dari 1 penumpang, total saja kalau 1 -->
                       ${
                         booking.passengerCount > 1
                           ? `<div class="small text-muted d-flex justify-content-between">
                              <span>Price Breakdown:</span>
-                             <span>${booking.priceBreakdown}</span>
+                             <span>${
+                               booking.seatClass === "economy"
+                                 ? `${booking.passengerCount} passengers &times; S$ ${(booking.totalPrice / booking.passengerCount).toLocaleString()}`
+                                 : booking.priceBreakdown
+                             }</span>
                            </div>`
                           : `<div class="small text-muted d-flex justify-content-between">
                              <span>Total Paid:</span>

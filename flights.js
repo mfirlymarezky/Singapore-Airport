@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchForm = document.getElementById("searchForm");
   const destinationSelect = document.getElementById("destination");
   const dateInput = document.getElementById("fromDate");
-  const airlineFilter = document.getElementById("airlineFilter");
   const sortSelect = document.getElementById("sortSelect");
   const flightsContainer = document.getElementById("flightsContainer");
   const searchTitle = document.getElementById("searchTitle");
@@ -21,27 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const popularRoutesPanel = document.getElementById("popularRoutesPanel");
   const popularRoutesContainer = document.getElementById("popularRoutesContainer");
 
-  /**
-   * isi dropdown maskapai secara dinamis dari data yang ada
-   * kenapa dinamis? biar kalau data berubah, dropdown ikut otomatis — ga perlu edit HTML manual
-   */
-  const populateAirlines = () => {
-    // Set() dipakai untuk hapus duplikat — kalau Qatar muncul 4x di data, dropdown tetap tampil sekali, antisipasi fitur otomatis dropdown tadi sih intinyo
-    // map ambil semua nama maskapai
-    // set hapus duplikasi nama maskapai
-    // sort atur berdasar abjad yang di dropdown itu
-    const airlines = [...new Set(allFlights.map((f) => f.airline))].sort();
-    // Sebelum diisi data baru, dropdown dikosongkan dulu dan disisakan satu pilihan default yaitu "All Airlines"
-    airlineFilter.innerHTML = '<option value="all">All Airlines</option>';
-    airlines.forEach((airline) => {
-      const option = document.createElement("option");
-      // Ngasih "tanda" buat sistem (misal: value="qatar")
-      option.value = airline;
-      // dituliskan si value tadi diwebnya sehingga bisa nampak di user
-      option.innerText = airline;
-      airlineFilter.appendChild(option);
-    });
-  };
+
 
   /**
    * terima array flight atau penerbangan, lalu cetak ke layar sebagai flight card
@@ -94,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="flight-time h5 mb-0" style="font-weight: 700;">${flight.departureTime}</div>
                 <div class="flight-route small">
                   <img src="${flight.originFlag}" alt="SG" class="me-1" style="width: 20px; vertical-align: middle;">
-                  ${flight.originCode}
+                  ${flight.originCode} (${flight.origin})
                 </div>
                 <div class="small text-muted">${flight.date}</div>
               </div>
@@ -103,18 +82,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 <div class="border-bottom w-100 position-relative">
                   <i class="fas fa-plane position-absolute top-50 start-50 translate-middle bg-white px-2"></i>
                 </div>
-                <div class="small text-muted mt-1">Non-stop</div>
+                <div class="small text-muted mt-1">${flight.stopLabel}</div>
               </div>
               <div class="text-center">
                 <div class="flight-time h5 mb-0" style="font-weight: 700;">${flight.arrivalTime}</div>
                 <div class="flight-route small">
                   <img src="${flight.destinationFlag}" alt="Flag" class="me-1" style="width: 20px; vertical-align: middle;">
-                  ${flight.destinationCode}
+                  ${flight.destinationCode} (${flight.destination})
                 </div>
+                <div class="small text-muted">${flight.date}</div>
               </div>
             </div>
           </div>
           <div class="col-md-3 text-center mb-3 mb-md-0">
+            ${
+              flight.badge 
+                ? `<div class="mb-2"><span class="badge badge-${flight.badge.toLowerCase().replace(/\s+/g, '-')} px-3 py-2 rounded-pill">${flight.badge}</span></div>` 
+                : ""
+            }
             <div class="flight-price h4 mb-0" style="color: var(--accent-gold); font-weight: 700;">S$ ${flight.pricePerPerson}</div>
           </div>
           <div class="col-md-2 text-center">
@@ -254,7 +239,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const updateResults = () => {
     const dest = destinationSelect.value;
     const date = dateInput.value;
-    const airline = airlineFilter.value;
     const sort = sortSelect.value;
 
     // mulai dari semua data, lalu kurangi satu per satu berdasarkan filter yang aktif
@@ -270,52 +254,54 @@ document.addEventListener("DOMContentLoaded", () => {
       filtered = filtered.filter((f) => f.date === date);
     }
 
-    // kalau bukan "all", saring berdasarkan maskapai
-    if (airline !== "all") {
-      filtered = filtered.filter((f) => f.airline === airline);
-    }
+
 
     // urutkan hasil sesuai pilihan sort — sort() langsung modifikasi array filtered
     if (sort === "priceLow") {
       // a - b (Murah ke Mahal): Jika hasilnya negatif, a (murah) akan ditaruh di depan.
       filtered.sort((a, b) => a.pricePerPerson - b.pricePerPerson);
       // b - a (Mahal ke Murah): Kebalikannya, ini akan menaruh angka yang lebih besar di awal daftar.
-    } else if (sort === "priceHigh") {
-      filtered.sort((a, b) => b.pricePerPerson - a.pricePerPerson);
     } else if (sort === "timeEarly") {
-      filtered.sort((a, b) => a.departureTime.localeCompare(b.departureTime));
-    } else if (sort === "timeLate") {
-      filtered.sort((a, b) => b.departureTime.localeCompare(a.departureTime));
+      filtered.sort((a, b) => {
+        const timeA = a.date + "T" + a.departureTime;
+        const timeB = b.date + "T" + b.departureTime;
+        return timeA.localeCompare(timeB);
+      });
     }
 
     // kirim hasil filter ke fungsi render — dari sini tugasnya updateResults selesai
     renderFlights(filtered);
 
     // update teks judul dan subtitle sesuai filter aktif angko data real time sesuai pilihan di form flight
-    searchTitle.innerText = dest
-      ? `Flights to ${dest}`
-      : "All Available Flights";
+    if (searchTitle) {
+      searchTitle.innerText = dest
+        ? `Flights to ${dest}`
+        : "All Available Flights";
+    }
 
     // Panel disappears automatically once any filter is applied
-    const hasFilter = dest || date || airline !== "all";
-    if (hasFilter) {
-      popularRoutesPanel.classList.add("d-none");
-    } else {
-      popularRoutesPanel.classList.remove("d-none");
-      if (popularRoutesContainer.innerHTML === "") {
-        renderPopularRoutes();
+    const hasFilter = dest || date;
+    if (popularRoutesPanel) {
+      if (hasFilter) {
+        popularRoutesPanel.classList.add("d-none");
+      } else {
+        popularRoutesPanel.classList.remove("d-none");
+        if (popularRoutesContainer && popularRoutesContainer.innerHTML === "") {
+          renderPopularRoutes();
+        }
       }
     }
 
     let subtitleParts = [];
-    subtitleParts.push(date ? date : "all dates");
-    subtitleParts.push(airline !== "all" ? airline : "all airlines");
+    if (date) subtitleParts.push(date);
+    else subtitleParts.push("all dates");
 
-    searchSubtitle.innerText = `Showing ${filtered.length} flight(s) (${subtitleParts.join(", ")})`;
+    if (searchSubtitle) {
+      searchSubtitle.innerText = `Showing ${filtered.length} flight(s) (${subtitleParts.join(", ")})`;
+    }
   };
 
-  // jalankan setup awal: isi dropdown maskapai
-  populateAirlines();
+
 
   // Handle query parameters (e.g. ?destination=Indonesia)
   const urlParams = new URLSearchParams(window.location.search);
@@ -333,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // pasang listener ke setiap filter — setiap berubah langsung trigger updateResults tanpa perlu tombol search
   destinationSelect.addEventListener("change", updateResults);
   dateInput.addEventListener("input", debouncedSearch);
-  airlineFilter.addEventListener("change", updateResults);
+
   sortSelect.addEventListener("change", updateResults);
 
   // safety net: blokir submit default browser yang akan reload halaman kalau user tekan Enter di dalam form

@@ -24,6 +24,8 @@ const allFlightsData = [
     durationMinutes: 110, // disimpan dalam menit, nanti dikonversi ke "1h 50m" oleh flights.js
     pricePerPerson: 320, // harga dasar economy — booking.js kalikan ini dengan jumlah penumpang dan multiplier kelas
     date: "2026-05-02", // format YYYY-MM-DD, harus sama persis dengan nilai dari date input HTML agar filter cocok
+    stops: 0,
+    stopLabel: "Non-stop",
   },
   {
     id: 2,
@@ -41,6 +43,8 @@ const allFlightsData = [
     durationMinutes: 465,
     pricePerPerson: 950,
     date: "2026-05-02",
+    stops: 0,
+    stopLabel: "Non-stop",
   },
   {
     id: 3,
@@ -58,6 +62,9 @@ const allFlightsData = [
     durationMinutes: 105,
     pricePerPerson: 350,
     date: "2026-05-02",
+    stops: 0,
+    stopLabel: "Non-stop",
+    badge: "Fastest",
   },
   {
     id: 4,
@@ -72,9 +79,12 @@ const allFlightsData = [
     destinationFlag: "https://flagcdn.com/w40/au.png",
     departureTime: "00:45",
     arrivalTime: "10:25",
-    durationMinutes: 460,
+    durationMinutes: 600,
     pricePerPerson: 1100,
     date: "2026-05-02",
+    stops: 1,
+    stopLabel: "1 Stop · via KUL",
+    badge: "Most Booked",
   },
   // ---- May 3, 2026 ----
   // struktur identik dengan May 2, hanya id, flightNumber, waktu, dan harga yang berbeda
@@ -94,6 +104,9 @@ const allFlightsData = [
     durationMinutes: 110,
     pricePerPerson: 310,
     date: "2026-05-03",
+    stops: 0,
+    stopLabel: "Non-stop",
+    badge: "Best Deal",
   },
   {
     id: 6,
@@ -108,9 +121,11 @@ const allFlightsData = [
     destinationFlag: "https://flagcdn.com/w40/au.png",
     departureTime: "23:45",
     arrivalTime: "09:30",
-    durationMinutes: 465,
+    durationMinutes: 660,
     pricePerPerson: 920,
     date: "2026-05-03",
+    stops: 1,
+    stopLabel: "1 Stop · via DOH",
   },
   {
     id: 7,
@@ -128,6 +143,8 @@ const allFlightsData = [
     durationMinutes: 110,
     pricePerPerson: 380,
     date: "2026-05-03",
+    stops: 0,
+    stopLabel: "Non-stop",
   },
   {
     id: 8,
@@ -142,8 +159,10 @@ const allFlightsData = [
     destinationFlag: "https://flagcdn.com/w40/au.png",
     departureTime: "10:30",
     arrivalTime: "20:15",
-    durationMinutes: 465,
+    durationMinutes: 720,
     pricePerPerson: 1050,
     date: "2026-05-03",
+    stops: 2,
+    stopLabel: "2 Stops · via BKK, KUL",
   },
 ];
